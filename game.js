@@ -546,14 +546,18 @@ function gameLoop() {
         document.getElementById("homepage").style.display = "flex"
         let MenuMusic = new Audio("menu.mp3");
         MenuMusic.play();
-        if (keyPresses.Space || mouseclick) { run = true }
+        if (keyPresses.Space || mouseclick) 
+        { 
+            run = true;
+        }
     }
     if (run && currentEvent == -1 && !keyPresses.Space && !mouseclick) {
         document.getElementById("comic-container").style.display = "flex"
-        comic = true
+        comic = true;
     }
     if (comic && (keyPresses.Space || mouseclick) && currentEvent == -1) {
         currentEvent = 0;
+        MenuMusic.pause();
     }
     if (!keyPresses.Space && !mouseclick && currentEvent == 0 && comic) {
         document.getElementById("homepage").style.display = "none"
