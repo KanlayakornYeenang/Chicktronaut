@@ -41,7 +41,7 @@ let bullet_a = new Image();
 let bullet_s = new Image();
 let bullet_d = new Image();
 let bullet = bullet_w;
-let hasShoot = false;
+let playershoot = false;
 
 let energy = 145;
 
@@ -78,8 +78,8 @@ let objstatus = false;
 
 let alpha = 0, delta = 0.025;
 let fade_status = false;
-let sword_status = false;
-let gun_status = false;
+let sword_status = true;
+let gun_status = true;
 
 let dialogue_status = false;
 let words = ["sander:โอ้ย...ที่นี่มันที่ไหนเนี่ย ปวดหัวชะมัด", "sander:แปลกมาก ทำไมถึง...จำอะไรไม่ได้เลยล่ะ?"];
@@ -99,6 +99,7 @@ let key = new Image();
 let usekey = new Image();
 let sword = new Image();
 let swordf = new Image();
+let gun = new Image();
 let lefthand = undefined;
 let lefthand_current = undefined;
 let righthand = undefined;
@@ -129,8 +130,8 @@ let monster_bulletx = -100;
 let frameCount_monster = 0;
 let monster_move = true;
 let monster_attack = false;
-let worm_check = true;
-let axeon_check = true;
+let worm_check = false;
+let axeon_check = false;
 let dead_status = false;
 let temp_x = 0;
 let temp_y = 0;
@@ -179,6 +180,7 @@ function loadImage() {
     usekey.src = 'https://cdn.discordapp.com/attachments/933591523189215235/967032887402700860/usekey.png'
     sword.src = 'https://cdn.discordapp.com/attachments/933591523189215235/967632061118697482/sword.png'
     swordf.src = 'https://cdn.discordapp.com/attachments/812749326543487058/967095296968523796/swordf.png'
+    gun.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972185631478407258/gunbg.png'
 
     worm.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968199488185446420/worm.png'
     worm_damage.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968361910737207306/worm_damage.png'
@@ -221,9 +223,35 @@ function rightsword() {
     }
 }
 
-function leftgun() { lefthand = "gun" }
+function leftgun() {
+    if (lefthand_current == "gun") {
+        lefthand = undefined;
+        lefthand_current = undefined;
+    }
+    else if (gun_status) {
+        lefthand = "gun"
+        lefthand_current = "gun";
+        if (righthand == "gun") {
+            righthand = undefined
+            righthand_current = undefined
+        }
+    }
+}
 
-function rightgun() { righthand = "gun" }
+function rightgun() {
+    if (righthand_current == "gun") {
+        righthand = undefined;
+        righthand_current = undefined;
+    }
+    else if (gun_status) {
+        righthand = "gun"
+        righthand_current = "gun";
+        if (lefthand == "gun") {
+            lefthand = undefined
+            lefthand_current = undefined
+        }
+    }
+}
 
 function retry() {
     hp_sander = hp_max;
@@ -309,7 +337,7 @@ function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     let hasMoved = false;
-    hasShoot = false;
+    playershoot = false;
 
     if (checkpoint == 1) {
         walkCollison(156, 174, 198, 60);
@@ -471,21 +499,32 @@ function gameLoop() {
         moveCharacter(movement_speed, 0, FACING_RIGHT);
         hasMoved = true;
     }
-    if (hp_sander > 0 && (keyPresses.Space || mouseclick) && ((lefthand == "sword" && righthand == undefined) || (righthand == "sword" && lefthand == undefined)) && !dialogue_status  && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
+    if (hp_sander > 0 && ((keyPresses.Space || mouseclick) && ((lefthand == "sword" && righthand == undefined) || (righthand == "sword" && lefthand == undefined))
+    || (mouseclick && righthand == "sword" && lefthand == "gun" || (keyPresses.Space && righthand == "gun" && lefthand == "sword")))
+    && !dialogue_status  && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         playerhit = true;
+    }
+    if (hp_sander > 0 && ((keyPresses.Space || mouseclick) && ((lefthand == "gun" && righthand == undefined) || (righthand == "gun" && lefthand == undefined))
+    || (mouseclick && righthand == "gun" && lefthand == "sword" || (keyPresses.Space && righthand == "sword" && lefthand == "gun")))
+    && !dialogue_status  && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
+        playershoot = true;
     }
     if (playerhit && hp_sander > 0) {
         if (hasMoved) { currentLoopIndex = 0 }
         hasMoved = false;
         sander_current = sander_sword
     }
+    else if (playershoot && hp_sander > 0) {
+        if (hasMoved) { currentLoopIndex = 0 }
+        hasMoved = false;
+        sander_current = sander_weapon
+    }
     else {
         sander_current = sander
     }
-    if ((keyPresses.Space || mouseclick) && energy > 0 && gun_status && !dialogue_status  && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
-        if (energy != 0) {
-            energy -= 1;
-        }
+    if ((keyPresses.Space || mouseclick) && energy > 0 && playershoot && !dialogue_status && gun_status
+    && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
+        if (energy != 0) { energy -= 1; }
         if (bullet_timer <= 0) {
             bullet_posx = positionX + 78;
             bullet_posy = positionY + 78;
@@ -507,14 +546,14 @@ function gameLoop() {
         document.getElementById("homepage").style.display = "flex"
         if (keyPresses.Space || mouseclick) { run = true }
     }
-    if (run && currentEvent == -1 && !keyPresses.Space) {
+    if (run && currentEvent == -1 && !keyPresses.Space && !mouseclick) {
         document.getElementById("comic-container").style.display = "flex"
         comic = true
     }
-    if (comic && keyPresses.Space && currentEvent == -1) {
+    if (comic && (keyPresses.Space || mouseclick) && currentEvent == -1) {
         currentEvent = 0;
     }
-    if (!keyPresses.Space && currentEvent == 0 && comic) {
+    if (!keyPresses.Space && !mouseclick && currentEvent == 0 && comic) {
         document.getElementById("homepage").style.display = "none"
         document.getElementById("comic-container").style.animationName = "comic"
         document.getElementById("comic-container").style.animationDuration = "2.5s"
@@ -1110,6 +1149,12 @@ function drawWeapon(x, y) {
     }
     if (righthand == "sword") {
         ctx.drawImage(sword, x + 215, 870, 124, 155)
+    }
+    if (lefthand == "gun") {
+        ctx.drawImage(gun, x + 20, 870, 124, 155)
+    }
+    if (righthand == "gun") {
+        ctx.drawImage(gun, x + 215, 870, 124, 155)
     }
 }
 
