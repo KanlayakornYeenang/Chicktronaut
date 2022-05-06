@@ -7,12 +7,14 @@
     as="image">
 <link rel="preload" href="https://cdn.discordapp.com/attachments/933591523189215235/971986516698071060/1_4.jpg"
     as="image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=JetBrains+Mono:wght@500&display=swap"
+    rel="stylesheet">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&display=swap');
-
         * {
             font-family: 'Bai Jamjuree', sans-serif;
         }
@@ -397,6 +399,19 @@
             color: white;
         }
 
+        #homepage {
+            position: absolute;
+            width: 160vh;
+            height: 90vh;
+            border: 3px solid white;
+            background-image: url('https://cdn.discordapp.com/attachments/933591523189215235/972041271134797844/homepage_0.jpg');
+            background-size: cover;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
         #comic-container {
             position: absolute;
             width: 160vh;
@@ -429,6 +444,15 @@
 
             100% {
                 background-image: url('https://cdn.discordapp.com/attachments/933591523189215235/971986516698071060/1_4.jpg');
+            }
+        }
+
+        @keyframes press {
+            from {
+                color: transparent;
+            }
+            to {
+                color: white;
             }
         }
     </style>
@@ -482,6 +506,13 @@
             </div>
         </div>
         <div id="comic-container"></div>
+        <div id="homepage">
+            <img style="position:absolute; animation-name: opacity2; animation-duration: 2.5s;"
+                src="https://cdn.discordapp.com/attachments/933591523189215235/972041288482430976/homepage_1.png">
+            <img style="position:absolute;"
+                src="https://cdn.discordapp.com/attachments/933591523189215235/972041288838955049/homepage_2.png">
+            <p style="font-family: 'JetBrains Mono', monospace; color:transparent; font-size:3.5vh; text-align:center; padding-bottom:4vh; animation: press 0.5s infinite alternate; animation-delay:1s;">press any key to start</p>
+        </div>
     </div>
     <div id="myModal" class="modal">
         <div class="modal-content">
