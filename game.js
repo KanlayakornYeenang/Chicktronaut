@@ -544,6 +544,7 @@ function gameLoop() {
 
     if (!run) {
         document.getElementById("homepage").style.display = "flex"
+
         if (keyPresses.Space || mouseclick) { run = true }
     }
     if (run && currentEvent == -1 && !keyPresses.Space && !mouseclick) {
@@ -1160,9 +1161,12 @@ function drawWeapon(x, y) {
 
 function drawBullet() {
     for (let i = 0; i < bullet_posxy.length; i++) {
+        if (Math.abs((bullet_posxy[i][0]-81)-(monster_posx[1]+162)) <= 50 && Math.abs((bullet_posxy[i][1]-81)-(monster_posy[1]+162)) <= 100) {
+            hp_monster -= 0.5
+        }
         if (bullet_posxy[i][1] <= 0) {
             bullet_posxy.splice(i, 1);
-            i--; //ลบไปแล้วถอยหลังกลับมาที่ i
+            i--;
             continue;
         }
         if (bullet_posxy[i][2] == FACING_UP) {
