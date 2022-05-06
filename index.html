@@ -418,20 +418,29 @@
             height: 90vh;
             border: 3px solid transparent;
             background-image: url('https://cdn.discordapp.com/attachments/933591523189215235/971986516698071060/1_4.jpg');
-            background-color: white;
             background-size: cover;
             animation-name: comic1;
-            animation-duration: 10s;
+            animation-duration: 8s;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        @keyframes comic {
+            to {
+                opacity: 0;
+            }
         }
 
         @keyframes comic1 {
             0% {
                 background-image: url('https://cdn.discordapp.com/attachments/933591523189215235/971987569707462676/0.jpg');
+                opacity: 0;
             }
 
             25% {
-                background-color: white;
                 background-image: url('https://cdn.discordapp.com/attachments/933591523189215235/971986515901165588/1_1.jpg');
+                opacity: 1;
             }
 
             50% {
@@ -449,11 +458,23 @@
 
         @keyframes press {
             from {
-                color: transparent;
+                opacity: 0;
             }
+
             to {
-                color: white;
+                opacity: 1;
             }
+        }
+
+        #press {
+            margin: auto;
+            width: 30%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3.5vh;
+            opacity: 0;
+            animation: press 1s infinite alternate 1s;
+            gap: 2vh;
         }
     </style>
 </head>
@@ -505,13 +526,33 @@
                 <h1 id="inf">เรียนรู้เพิ่มเติมเกี่ยวกับ<br>ประชาธิปไตยในอวกาศ</h1>
             </div>
         </div>
-        <div id="comic-container"></div>
         <div id="homepage">
             <img style="position:absolute; animation-name: opacity2; animation-duration: 2.5s;"
                 src="https://cdn.discordapp.com/attachments/933591523189215235/972041288482430976/homepage_1.png">
             <img style="position:absolute;"
                 src="https://cdn.discordapp.com/attachments/933591523189215235/972041288838955049/homepage_2.png">
-            <p style="font-family: 'JetBrains Mono', monospace; color:transparent; font-size:3.5vh; text-align:center; padding-bottom:4vh; animation: press 0.5s infinite alternate; animation-delay:1s;">press any key to start</p>
+            <div id="press">
+                <img style="width:8vh; height:8vh; transform:translateY(2vh);"
+                    src="https://cdn.discordapp.com/attachments/933591523189215235/972140868729462804/spacebar.png">
+                <p style="font-family: 'JetBrains Mono', monospace; font-size:3.5vh; text-align:center; color:white">
+                    /</p>
+                <img style="width:8vh; height:8vh; transform:translateY(2vh);"
+                    src="https://cdn.discordapp.com/attachments/933591523189215235/972140868955934741/leftclick.png">
+                <p style="font-family: 'JetBrains Mono', monospace; font-size:3.5vh; text-align:center; color:white;">
+                    to start</p>
+            </div>
+        </div>
+        <div id="comic-container">
+            <div id="press" style="animation-delay:2s; background-color: rgb(0, 0, 0, 0.5); transform: translate(62.5vh, 2.5vh) scale(0.6);">
+                <img style="width:8vh; height:8vh; transform:translateY(2vh);"
+                    src="https://cdn.discordapp.com/attachments/933591523189215235/972140868729462804/spacebar.png">
+                <p style="font-family: 'JetBrains Mono', monospace; font-size:3.5vh; text-align:center; color:white">
+                    /</p>
+                <img style="width:8vh; height:8vh; transform:translateY(2vh);"
+                    src="https://cdn.discordapp.com/attachments/933591523189215235/972140868955934741/leftclick.png">
+                <p style="font-family: 'JetBrains Mono', monospace; font-size:3.5vh; text-align:center; color:white;">
+                    to skip</p>
+            </div>
         </div>
     </div>
     <div id="myModal" class="modal">

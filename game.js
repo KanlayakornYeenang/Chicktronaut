@@ -11,6 +11,8 @@ const FACING_RIGHT = 1;
 const FRAME_LIMIT = 12;
 const delay = 10;
 
+let run = false;
+let comic = false;
 let movement_speed = 6;
 let canvas = document.querySelector('#myCanvas');
 let ctx = canvas.getContext('2d');
@@ -66,7 +68,7 @@ let currentBg = bg1;
 let currentBg_ = bg1_1;
 let bg_obj = bg1_obj1;
 let checkpoint = 1;
-let currentEvent = 0;
+let currentEvent = -1;
 //
 
 let objposX = [];
@@ -75,11 +77,11 @@ let objposXY = [];
 let objstatus = false;
 
 let alpha = 0, delta = 0.025;
-let fade_status = true;
+let fade_status = false;
 let sword_status = false;
 let gun_status = false;
 
-let dialogue_status = true
+let dialogue_status = false;
 let words = ["sander:โอ้ย...ที่นี่มันที่ไหนเนี่ย ปวดหัวชะมัด", "sander:แปลกมาก ทำไมถึง...จำอะไรไม่ได้เลยล่ะ?"];
 let words_index = 0;
 let count = 0;
@@ -137,7 +139,7 @@ let posatmy = 0;
 let player_takedmg = false;
 let monster_takedmg = false;
 
-window.addEventListener('keydown', (event) => { keyPresses[event.code] = true; });
+window.addEventListener('keydown', (event) => {keyPresses[event.code] = true; });
 window.addEventListener('keyup', (event) => { keyPresses[event.code] = false; });
 window.addEventListener('mousedown', (event) => { mouseclick = true; });
 window.addEventListener('mouseup', (event) => { mouseclick = false; });
@@ -449,26 +451,27 @@ function gameLoop() {
     if (checkpoint == 6) {
         walkCollison(0, 0, 0, 0)
     }
+
     if ((keyPresses.KeyW || keyPresses.KeyS) && (keyPresses.KeyA || keyPresses.KeyD)) {
         movement_speed /= Math.sqrt(2);
     }
-    if (keyPresses.KeyW && !dialogue_status && !playerhit && hp_sander > 0) {
+    if (keyPresses.KeyW && !dialogue_status && !playerhit && hp_sander > 0 && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         moveCharacter(0, -movement_speed, FACING_UP);
         hasMoved = true;
     }
-    if (keyPresses.KeyS && !dialogue_status && !playerhit && hp_sander > 0) {
+    if (keyPresses.KeyS && !dialogue_status && !playerhit && hp_sander > 0 && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         moveCharacter(0, movement_speed, FACING_DOWN);
         hasMoved = true;
     }
-    if (keyPresses.KeyA && !dialogue_status && !playerhit && hp_sander > 0) {
+    if (keyPresses.KeyA && !dialogue_status && !playerhit && hp_sander > 0 && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         moveCharacter(-movement_speed, 0, FACING_LEFT);
         hasMoved = true;
     }
-    if (keyPresses.KeyD && !dialogue_status && !playerhit && hp_sander > 0) {
+    if (keyPresses.KeyD && !dialogue_status && !playerhit && hp_sander > 0 && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         moveCharacter(movement_speed, 0, FACING_RIGHT);
         hasMoved = true;
     }
-    if (hp_sander > 0 && (keyPresses.Space || mouseclick) && ((lefthand == "sword" && righthand == undefined) || (righthand == "sword" && lefthand == undefined)) && !dialogue_status) {
+    if (hp_sander > 0 && (keyPresses.Space || mouseclick) && ((lefthand == "sword" && righthand == undefined) || (righthand == "sword" && lefthand == undefined)) && !dialogue_status  && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         playerhit = true;
     }
     if (playerhit && hp_sander > 0) {
@@ -479,7 +482,7 @@ function gameLoop() {
     else {
         sander_current = sander
     }
-    if ((keyPresses.Space || mouseclick) && energy > 0 && gun_status && !dialogue_status) {
+    if ((keyPresses.Space || mouseclick) && energy > 0 && gun_status && !dialogue_status  && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         if (energy != 0) {
             energy -= 1;
         }
@@ -500,6 +503,28 @@ function gameLoop() {
         }
     }
 
+    if (!run) {
+        document.getElementById("homepage").style.display = "flex"
+        if (keyPresses.Space || mouseclick) { run = true }
+    }
+    if (run && currentEvent == -1 && !keyPresses.Space) {
+        document.getElementById("comic-container").style.display = "flex"
+        comic = true
+    }
+    if (comic && keyPresses.Space && currentEvent == -1) {
+        currentEvent = 0;
+    }
+    if (!keyPresses.Space && currentEvent == 0 && comic) {
+        document.getElementById("homepage").style.display = "none"
+        document.getElementById("comic-container").style.animationName = "comic"
+        document.getElementById("comic-container").style.animationDuration = "2.5s"
+        setTimeout(() => {
+            document.getElementById("comic-container").style.display = "none"
+            comic = false
+          }, 2500)
+        dialogue_status = true;
+    }
+
     movement_speed = 6;
 
     if (playerhit) {
@@ -515,8 +540,8 @@ function gameLoop() {
     }
 
     if (hasMoved || playerhit || dead_status) {
-        console.log("positionX: ", positionX);
-        console.log("positionY: ", positionY);
+        //console.log("positionX: ", positionX);
+        //console.log("positionY: ", positionY);
         frameCount++;
         if (frameCount >= FRAME_LIMIT) {
             frameCount = 0;
@@ -1137,7 +1162,7 @@ function fade() {
 }
 
 function dialogue() {
-    if (!fade_status) {
+    if (!fade_status && document.getElementById("comic-container").style.display == "none") {
         ctx.drawImage(sander_dia, (myCanvas.width / 2) - (sander_dia.width / 2), 685, sander_dia.width, sander_dia.height);
         if (count + 1 < words[words_index].length) { count++; }
         ctx.fillStyle = "white"
