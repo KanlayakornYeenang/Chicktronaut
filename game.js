@@ -544,7 +544,8 @@ function gameLoop() {
 
     if (!run) {
         document.getElementById("homepage").style.display = "flex"
-
+        let MenuMusic = new Audio("menu.mp3");
+        MenuMusic.play();
         if (keyPresses.Space || mouseclick) { run = true }
     }
     if (run && currentEvent == -1 && !keyPresses.Space && !mouseclick) {
