@@ -473,8 +473,29 @@
             justify-content: center;
             margin-bottom: 3.5vh;
             opacity: 0;
-            animation: press 1s infinite alternate 1s;
+            animation: press 1s infinite alternate;
             gap: 2vh;
+        }
+
+        @keyframes kapribta {
+            0% {
+                opacity: 0;
+            }
+            30% {
+                opacity: 0;
+            }
+            35% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes dukdik {
+            to {
+                transform: translateY(2vh);
+            }
         }
     </style>
 </head>
@@ -527,10 +548,12 @@
             </div>
         </div>
         <div id="homepage">
-            <img style="position:absolute; animation-name: opacity2; animation-duration: 2.5s;"
+            <img style="position:absolute; animation: dukdik 1.5s infinite linear alternate; transform: translateY(-vh);"
                 src="https://cdn.discordapp.com/attachments/933591523189215235/972041288482430976/homepage_1.png">
             <img style="position:absolute;"
                 src="https://cdn.discordapp.com/attachments/933591523189215235/972041288838955049/homepage_2.png">
+            <img style="position:absolute; animation: kapribta 2.5s infinite alternate;"
+                    src="https://cdn.discordapp.com/attachments/933591523189215235/972114004413669406/homepage_3.png">
             <div id="press">
                 <img style="width:8vh; height:8vh; transform:translateY(2vh);"
                     src="https://cdn.discordapp.com/attachments/933591523189215235/972140868729462804/spacebar.png">
