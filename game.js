@@ -78,8 +78,8 @@ let objstatus = false;
 
 let alpha = 0, delta = 0.025;
 let fade_status = false;
-let sword_status = true;
-let gun_status = true;
+let sword_status = false;
+let gun_status = false;
 
 let dialogue_status = false;
 let words = ["sander:โอ้ย...ที่นี่มันที่ไหนเนี่ย ปวดหัวชะมัด", "sander:แปลกมาก ทำไมถึง...จำอะไรไม่ได้เลยล่ะ?"];
@@ -106,6 +106,8 @@ let lefthand_current = undefined;
 let righthand = undefined;
 let righthand_current = undefined;
 let playerhit = false;
+let sword_inhand = new Image();
+let gunL = new Image();
 
 let worm = new Image();
 let axeon = new Image();
@@ -141,7 +143,7 @@ let posatmy = 0;
 let player_takedmg = false;
 let monster_takedmg = false;
 
-window.addEventListener('keydown', (event) => {keyPresses[event.code] = true; });
+window.addEventListener('keydown', (event) => { keyPresses[event.code] = true; });
 window.addEventListener('keyup', (event) => { keyPresses[event.code] = false; });
 window.addEventListener('mousedown', (event) => { mouseclick = true; });
 window.addEventListener('mouseup', (event) => { mouseclick = false; });
@@ -155,6 +157,9 @@ function loadImage() {
     sander.onload = () => { window.requestAnimationFrame(gameLoop); };
     sander_pf_st.src = 'https://media.discordapp.net/attachments/933591523189215235/965153062740176916/sander_pf_st.png';
     sander_dia.src = 'https://cdn.discordapp.com/attachments/933591523189215235/966573732271382578/sander_dailogue.png';
+
+    sword_inhand.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972396351449096232/sword_inhand.png'
+    gunL.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972396333640085544/gun_inhand_l.png'
 
     bullet_w.src = 'https://cdn.discordapp.com/attachments/812749326543487058/966710007934636062/bullet_w.png'
     bullet_a.src = 'https://cdn.discordapp.com/attachments/812749326543487058/966710008307916820/bullet_a.png'
@@ -503,13 +508,13 @@ function gameLoop() {
         hasMoved = true;
     }
     if (hp_sander > 0 && ((keyPresses.Space || mouseclick) && ((lefthand == "sword" && righthand == undefined) || (righthand == "sword" && lefthand == undefined))
-    || (mouseclick && righthand == "sword" && lefthand == "gun" || (keyPresses.Space && righthand == "gun" && lefthand == "sword")))
-    && !dialogue_status  && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
+        || (mouseclick && righthand == "sword" && lefthand == "gun" || (keyPresses.Space && righthand == "gun" && lefthand == "sword")))
+        && !dialogue_status && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         playerhit = true;
     }
     if (hp_sander > 0 && ((keyPresses.Space || mouseclick) && ((lefthand == "gun" && righthand == undefined) || (righthand == "gun" && lefthand == undefined))
-    || (mouseclick && righthand == "gun" && lefthand == "sword" || (keyPresses.Space && righthand == "sword" && lefthand == "gun")))
-    && !dialogue_status  && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
+        || (mouseclick && righthand == "gun" && lefthand == "sword" || (keyPresses.Space && righthand == "sword" && lefthand == "gun")))
+        && !dialogue_status && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         playershoot = true;
     }
     if (playerhit && hp_sander > 0) {
@@ -526,7 +531,7 @@ function gameLoop() {
         sander_current = sander
     }
     if ((keyPresses.Space || mouseclick) && energy > 0 && playershoot && !dialogue_status && gun_status
-    && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
+        && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         if (energy != 0) { energy -= 1; }
         if (bullet_timer <= 0) {
             bullet_posx = positionX + 78;
@@ -562,7 +567,7 @@ function gameLoop() {
         setTimeout(() => {
             document.getElementById("comic-container").style.display = "none"
             comic = false
-          }, 2500)
+        }, 2500)
         if (currentEvent == 0) { dialogue_status = true }
     }
 
@@ -635,6 +640,10 @@ function gameLoop() {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
         if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
+        if (sander_current == sander_weapon) {
+            if (currentDirection == FACING_RIGHT) { ctx.drawImage(gun, positionX + 115, positionY + 42, 90, 90) }
+            if (currentDirection == FACING_LEFT) { ctx.drawImage(gunL, positionX - 40, positionY + 42, 90, 90) }
+        }
         drawFrame(sander_current, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
         if (currentEvent == 5 && !dialogue_status && !inventory.includes("sword") && positionY + 162 < 162 + 120) { ctx.drawImage(sword, 1140, 162, 96, 120) }
         if (checkpoint == 1 && extrax[0] != -162 && positionY < extray[0]) { ctx.fillRect(extrax[0], extray[0], 162, 162) }
@@ -651,6 +660,10 @@ function gameLoop() {
         ctx.fillRect(extrax[1], extray[1], 162, 162)
         if (checkpoint == 1 && extrax[0] != -162 && positionY >= extray[0]) { ctx.fillRect(extrax[0], extray[0], 162, 162) }
         drawObj()
+        if (sander_current == sander_weapon) {
+            if (currentDirection == FACING_RIGHT) { ctx.drawImage(gun, positionX + 115, positionY + 42, 90, 90) }
+            if (currentDirection == FACING_LEFT) { ctx.drawImage(gunL, positionX - 40, positionY + 42, 90, 90) }
+        }
         drawFrame(sander_current, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
         if (checkpoint == 1 && extrax[0] != -162 && positionY < extray[0]) { ctx.fillRect(extrax[0], extray[0], 162, 162) }
     }
@@ -680,6 +693,10 @@ function gameLoop() {
         if (checkpoint == 5 && fight_status && (positionY + 162 >= monster_posy[2] + 174)) {
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
         }
+        if (sander_current == sander_weapon) {
+            if (currentDirection == FACING_RIGHT) { ctx.drawImage(gun, positionX + 115, positionY + 42, 90, 90) }
+            if (currentDirection == FACING_LEFT) { ctx.drawImage(gunL, positionX - 40, positionY + 42, 90, 90) }
+        }
         drawFrame(sander_current, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
         if (currentEvent == 5 && !dialogue_status && !inventory.includes("sword") && positionY + 162 < 162 + 120) {
             ctx.drawImage(sword, 1140, 162, 96, 120)
@@ -704,6 +721,13 @@ function gameLoop() {
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
         }
     }
+    // if (sander_current == sander_weapon) {
+    //     if (currentDirection == FACING_DOWN) {
+    //         if (lefthand == "sword" || righthand == "sword") {
+    //             ctx.drawImage(sword_inhand, positionX, positionY+6, 80, 80)
+    //         }
+    //     }
+    // }
 
     if (fight_status) {
         drawBlood();
@@ -779,7 +803,7 @@ function gameLoop() {
 
     /* GAME EVENT Bg2 */
     if (currentEvent == 8 && checkpoint == 2 && positionX >= 1280 && !worm_check) { fight_status = true }
-    if (positionX >= monster_posx[0]-120 && positionX <= monster_posx[0]+324 && positionY >= monster_posy[0]-115 && positionY <= monster_posy[0]+115 && worm_check && !dialogue_status && !inventory.includes("gun")) {
+    if (positionX >= monster_posx[0] - 120 && positionX <= monster_posx[0] + 324 && positionY >= monster_posy[0] - 115 && positionY <= monster_posy[0] + 115 && worm_check && !dialogue_status && !inventory.includes("gun")) {
         ctx.drawImage(wormf, positionX + 144, positionY + 42)
         if (keyPresses.KeyF && !inventory.includes("gun")) {
             inventory.push("gun")
@@ -1179,7 +1203,7 @@ function drawWeapon(x, y) {
 
 function drawBullet() {
     for (let i = 0; i < bullet_posxy.length; i++) {
-        if (Math.abs((bullet_posxy[i][0]+81)-(monster_posx[1]+162)) <= 50 && Math.abs((bullet_posxy[i][1]+81)-(monster_posy[1]+162)) <= 100) {
+        if (Math.abs((bullet_posxy[i][0] + 81) - (monster_posx[1] + 162)) <= 50 && Math.abs((bullet_posxy[i][1] + 81) - (monster_posy[1] + 162)) <= 100) {
             hp_monster -= 0.5
         }
         if (bullet_posxy[i][1] <= 0) {
