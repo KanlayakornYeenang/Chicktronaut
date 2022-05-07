@@ -100,6 +100,7 @@ let usekey = new Image();
 let sword = new Image();
 let swordf = new Image();
 let gun = new Image();
+let wormf = new Image();
 let lefthand = undefined;
 let lefthand_current = undefined;
 let righthand = undefined;
@@ -181,6 +182,7 @@ function loadImage() {
     sword.src = 'https://cdn.discordapp.com/attachments/933591523189215235/967632061118697482/sword.png'
     swordf.src = 'https://cdn.discordapp.com/attachments/812749326543487058/967095296968523796/swordf.png'
     gun.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972185631478407258/gunbg.png'
+    wormf.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972357220593455114/wormf.png'
 
     worm.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968199488185446420/worm.png'
     worm_damage.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968361910737207306/worm_damage.png'
@@ -429,7 +431,7 @@ function gameLoop() {
         if (positionX >= 1770 && positionY > 450 && currentDirection == FACING_RIGHT) {
             positionX = 12
             positionY = 522
-            hp_monster = 150;
+            hp_monster = 5;
             bg = bg4
             currentBg = bg4
             checkpoint = 4
@@ -460,6 +462,7 @@ function gameLoop() {
             bg_obj = bg5_obj1;
             checkpoint = 5
             fade_status = true;
+            monster_action = 2;
         }
     }
 
@@ -544,7 +547,7 @@ function gameLoop() {
 
     if (!run) {
         document.getElementById("homepage").style.display = "flex"
-        if (keyPresses.Space || mouseclick) {run = true }
+        if (keyPresses.Space || mouseclick) { run = true }
     }
     if (run && currentEvent == -1 && !keyPresses.Space && !mouseclick) {
         document.getElementById("comic-container").style.display = "flex"
@@ -553,6 +556,7 @@ function gameLoop() {
     if (comic && (keyPresses.Space || mouseclick) && currentEvent == -1) {
         currentEvent = 0;
     }
+    
     if (!keyPresses.Space && !mouseclick && currentEvent == 0 && comic) {
         document.getElementById("homepage").style.display = "none"
         document.getElementById("comic-container").style.animationName = "comic"
@@ -776,7 +780,15 @@ function gameLoop() {
     }
 
     /* GAME EVENT Bg2 */
-    if (currentEvent == 8 && checkpoint == 2 && positionX >= 1280) { fight_status = true }
+    if (currentEvent == 8 && checkpoint == 2 && positionX >= 1280 && !worm_check) { fight_status = true }
+    if (positionX >= monster_posx[0]-120 && positionX <= monster_posx[0]+324 && positionY >= monster_posy[0]-115 && positionY <= monster_posy[0]+115 && worm_check && !dialogue_status && !inventory.includes("gun")) {
+        ctx.drawImage(wormf, positionX + 144, positionY + 42)
+        if (keyPresses.KeyF && !inventory.includes("gun")) {
+            inventory.push("gun")
+            gun_status = true
+            comic = true
+        }
+    }
 
     /* GAME EVENT Bg3 */
 
@@ -899,7 +911,7 @@ function gameLoop() {
             monster_attack = true
             monster_bulletx = monster_posx[2]
         }
-        if (Math.abs((positionX + 81) - (monster_posx[2] + 96)) < 250) {
+        if (Math.abs((positionX + 81) - (monster_posx[2] + 96)) < 250 && Math.abs((positionY + 81) - (monster_posy[2] + 96)) < 180) {
             if (monster_action != 5) {
                 currentLoopIndex_monster = 0
             }
@@ -942,7 +954,7 @@ function gameLoop() {
             if ((Math.abs(monster_bulletx - positionX) <= 250) || (monster_action == 5 && monster_bulletx >= -100)) {
                 ctx.drawImage(bunchun_action4, 1 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
             }
-            if ((Math.abs(monster_bulletx - positionX) <= 150) || (monster_action == 5 && monster_bulletx >= -100)) {
+            if ((Math.abs(monster_bulletx - positionX) <= 150)) {
                 ctx.drawImage(bunchun_action4, 2 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
             }
             else {
@@ -1160,7 +1172,7 @@ function drawWeapon(x, y) {
 
 function drawBullet() {
     for (let i = 0; i < bullet_posxy.length; i++) {
-        if (Math.abs((bullet_posxy[i][0]-81)-(monster_posx[1]+162)) <= 50 && Math.abs((bullet_posxy[i][1]-81)-(monster_posy[1]+162)) <= 100) {
+        if (Math.abs((bullet_posxy[i][0]+81)-(monster_posx[1]+162)) <= 50 && Math.abs((bullet_posxy[i][1]+81)-(monster_posy[1]+162)) <= 100) {
             hp_monster -= 0.5
         }
         if (bullet_posxy[i][1] <= 0) {
@@ -1217,11 +1229,11 @@ function dialogue() {
         ctx.font = "36px Bai Jamjuree";
 
         if (!words[words_index].includes("<br>")) {
-            chars1 = (words[words_index].slice(words[words_index].indexOf(":") + 1, words[words_index].length)).substr(0, count);
+            chars1 = (words[words_index].slice(words[words_index].indexOf(":") + 1, words[words_index].length)).substring(0, count);
             ctx.fillText(chars1, 764, 925);
         }
         else {
-            chars1 = (words[words_index].slice(words[words_index].indexOf(":") + 1, words[words_index].indexOf("<"))).substr(0, count);
+            chars1 = (words[words_index].slice(words[words_index].indexOf(":") + 1, words[words_index].indexOf("<"))).substring(0, count);
             if (count >= words[words_index].indexOf("<") && count <= words[words_index].length) {
                 chars2 = words[words_index].slice(words[words_index].indexOf(">") + 1, count + 1)
                 ctx.fillText(chars2, 764, 925 + 30);
