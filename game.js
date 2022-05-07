@@ -553,11 +553,9 @@ function gameLoop() {
         document.getElementById("comic-container").style.display = "flex"
         comic = true;
     }
-    if (comic && (keyPresses.Space || mouseclick) && currentEvent == -1) {
-        currentEvent = 0;
-    }
-    
-    if (!keyPresses.Space && !mouseclick && currentEvent == 0 && comic) {
+    if (comic && (keyPresses.Space || mouseclick) && currentEvent == -1) { currentEvent = 0 }
+    if (comic && (keyPresses.Space || mouseclick) && currentEvent == 8) { currentEvent = 9 }
+    if (!keyPresses.Space && !mouseclick && (currentEvent == 0 || currentEvent == 9) && comic) {
         document.getElementById("homepage").style.display = "none"
         document.getElementById("comic-container").style.animationName = "comic"
         document.getElementById("comic-container").style.animationDuration = "2.5s"
@@ -565,7 +563,7 @@ function gameLoop() {
             document.getElementById("comic-container").style.display = "none"
             comic = false
           }, 2500)
-        dialogue_status = true;
+        if (currentEvent == 0) { dialogue_status = true }
     }
 
     movement_speed = 6;
@@ -636,7 +634,7 @@ function gameLoop() {
         if (fight_status && checkpoint == 2 && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
-        if (checkpoint == 2 & worm_check && !fight_status && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
+        if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
         drawFrame(sander_current, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
         if (currentEvent == 5 && !dialogue_status && !inventory.includes("sword") && positionY + 162 < 162 + 120) { ctx.drawImage(sword, 1140, 162, 96, 120) }
         if (checkpoint == 1 && extrax[0] != -162 && positionY < extray[0]) { ctx.fillRect(extrax[0], extray[0], 162, 162) }
@@ -644,7 +642,7 @@ function gameLoop() {
         if (fight_status && checkpoint == 2 && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
-        if (checkpoint == 2 && worm_check && !fight_status && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
+        if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
         drawObj();
     }
     else if (currentEvent < 4) {
@@ -669,7 +667,7 @@ function gameLoop() {
         if (fight_status && checkpoint == 2 && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
-        if (checkpoint == 2 && worm_check && !fight_status && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
+        if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
         if (checkpoint == 4 && !axeon_check && !fight_status && (positionY + 162 >= monster_posy[1] + 300)) {
             ctx.drawImage(axeon, 0 * 512, 3 * 512, 512, 512, monster_posx[1], monster_posy[1], 324, 324)
         }
@@ -692,7 +690,7 @@ function gameLoop() {
         if (fight_status && checkpoint == 2 && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
-        if (checkpoint == 2 && worm_check && !fight_status && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
+        if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
         if (checkpoint == 4 && !axeon_check && !fight_status && (positionY + 162 < monster_posy[1] + 300)) {
             ctx.drawImage(axeon, 0 * 512, 3 * 512, 512, 512, monster_posx[1], monster_posy[1], 324, 324)
         }
@@ -773,7 +771,7 @@ function gameLoop() {
         currentEvent = 7
     }
     if (currentEvent >= 7 && currentEvent <= 8 && !dialogue_status) {
-        if (extray[1] == 138) { document.getElementById("myModal").style.display = "ืnone" }
+        if (extray[1] == 138) { document.getElementById("myModal").style.display = "flex" }
         if (extray[1] < 648) { extray[1] += 6 }
         else if (extrax[1] < 2000) { extrax[1] += 6 }
         currentEvent = 8
@@ -787,31 +785,40 @@ function gameLoop() {
             inventory.push("gun")
             gun_status = true
             comic = true
+            document.getElementById("comic-container").style.display = "flex"
+            document.getElementById("comic-container").style.backgroundImage = "url('https://cdn.discordapp.com/attachments/933591523189215235/972361806041477150/2_6.jpg')"
+            document.getElementById("comic-container").style.animationName = "comic2"
+            document.getElementById("comic-container").style.animationDuration = "8s"
         }
+    }
+    if (currentEvent == 9 && document.getElementById("comic-container").style.display == "none") {
+        document.getElementById("myModal").style.display = "flex"
+        document.getElementById("modal-innertext").innerHTML = "<img src='https://cdn.discordapp.com/attachments/933591523189215235/972384853343481886/tutorial2.png'>การใช้ปืนจะทำให้ Energy ของคุณลดลงอย่างมาก<br><br>หากคุณกำลังถืออาวุธสองมือ ดาเมจของอาวุธจะโดนลดลง<br>กดปุ่มสเปซเพื่อโจมตีด้วยอาวุธมือซ้าย คลิกซ้ายเพื่อโจมตีด้วยอาวุธมือขวา";
+        currentEvent = 10
     }
 
     /* GAME EVENT Bg3 */
 
     /* GAME EVENT Bg4 */
-    if (checkpoint == 4 && positionX >= 990 && positionX <= 1150 && positionY >= 400 && positionY <= 565 && currentEvent == 8 && !dialogue_status && !axeon_check) {
-        ctx.drawImage(axeonf, positionX + 144, positionY + 42)
-        if (keyPresses.KeyF && currentEvent == 8) {
-            dialogue_status = true
-            words = ["แอ็กซีออน:บลาบลาบลาบลาบลา", "แซนเดอร์:บลาบลาบลาบลาบลา", "แอ็กซีออน:บลาบลาบลาบลาบลา"]
-            currentEvent = 9
-        }
-    }
-    if (currentEvent == 9 && !dialogue_status && positionX >= 990 && positionX <= 1150) {
-        fight_status = true;
-    }
+    // if (checkpoint == 4 && positionX >= 990 && positionX <= 1150 && positionY >= 400 && positionY <= 565 && currentEvent == 8 && !dialogue_status && !axeon_check) {
+    //     ctx.drawImage(axeonf, positionX + 144, positionY + 42)
+    //     if (keyPresses.KeyF && currentEvent == 8) {
+    //         dialogue_status = true
+    //         words = ["แอ็กซีออน:บลาบลาบลาบลาบลา", "แซนเดอร์:บลาบลาบลาบลาบลา", "แอ็กซีออน:บลาบลาบลาบลาบลา"]
+    //         currentEvent = 9
+    //     }
+    // }
+    // if (currentEvent == 9 && !dialogue_status && positionX >= 990 && positionX <= 1150) {
+    //     fight_status = true;
+    // }
 
     /* GAME EVENT Bg5 */
-    if (currentEvent == 9 && !dialogue_status && checkpoint == 5) {
-        dialogue_status = true
-        words = ["มินิบอส:บลาบลาบลาบลาบลา", "แซนเดอร์:บลาบลาบลาบลาบลา", "มินิบอส:บลาบลาบลาบลาบลา"]
-        currentEvent = 10
-    }
-    if (currentEvent == 10 && !dialogue_status) { fight_status = true }
+    // if (currentEvent == 9 && !dialogue_status && checkpoint == 5) {
+    //     dialogue_status = true
+    //     words = ["มินิบอส:บลาบลาบลาบลาบลา", "แซนเดอร์:บลาบลาบลาบลาบลา", "มินิบอส:บลาบลาบลาบลาบลา"]
+    //     currentEvent = 10
+    // }
+    // if (currentEvent == 10 && !dialogue_status) { fight_status = true }
 
     if (fight_status) {
         document.getElementById("information").style.display = "none"
