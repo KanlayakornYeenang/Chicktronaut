@@ -950,32 +950,32 @@ function gameLoop() {
     /* GAME EVENT Bg3 */
 
     /* GAME EVENT Bg4 */
-    // if (checkpoint == 4 && positionX >= 990 && positionX <= 1150 && positionY >= 400 && positionY <= 565 && currentEvent == 8 && !dialogue_status && !axeon_check) {
-    //     ctx.drawImage(axeonf, positionX + 144, positionY + 42)
-    //     if (keyPresses.KeyF && currentEvent == 8) {
-    //         dialogue_status = true
-    //         words = ["แอ็กซีออน:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "แอ็กซีออน:บลาบลาบลาบลาบลา"]
-    //         currentEvent = 9
-    //     }
-    // }
-    // if (currentEvent == 9 && !dialogue_status && positionX >= 990 && positionX <= 1150) {
-    //     fight_status = true;
-    // }
+    if (checkpoint == 4 && positionX >= 990 && positionX <= 1150 && positionY >= 400 && positionY <= 565 && currentEvent == 10 && !dialogue_status && !axeon_check) {
+         ctx.drawImage(axeonf, positionX + 144, positionY + 42)
+         if (keyPresses.KeyF && currentEvent == 10) {
+             dialogue_status = true
+             words = ["แอ็กซีออน:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "แอ็กซีออน:บลาบลาบลาบลาบลา"]
+             currentEvent = 11
+         }
+     }
+     if (currentEvent == 11 && !dialogue_status && positionX >= 990 && positionX <= 1150 && !axeon_check) {
+         fight_status = true;
+     }
 
     /* GAME EVENT Bg5 */
-    // if (currentEvent == 9 && !dialogue_status && checkpoint == 5) {
-    //     dialogue_status = true
-    //     words = ["มินิบอส:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "มินิบอส:บลาบลาบลาบลาบลา"]
-    //     currentEvent = 10
-    // }
-    // if (currentEvent == 10 && !dialogue_status) { fight_status = true }
+    //  if (currentEvent == 9 && !dialogue_status && checkpoint == 5) {
+    //      dialogue_status = true
+    //      words = ["มินิบอส:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "มินิบอส:บลาบลาบลาบลาบลา"]
+    //      currentEvent = 10
+    //  }
+    //  if (currentEvent == 10 && !dialogue_status) { fight_status = true }
 
-    if (fight_status) {
-        document.getElementById("information").style.display = "none"
-    }
-    else {
-        document.getElementById("information").style.display = "flex"
-    }
+    // if (fight_status) {
+    //     document.getElementById("information").style.display = "none"
+    // }
+    // else {
+    //     document.getElementById("information").style.display = "flex"
+    // }
 
     if (checkpoint == 2) {
         if (monster_move && fight_status && monster_posy[0] < positionY) {
