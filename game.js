@@ -71,16 +71,16 @@ let bg5_obj1 = new Image();
 let bg6_obj1 = new Image();
 
 //เปลี่ยนตรงนี้เพื่อวาร์ป
-let run = true;
+let run = false;
 let comic = false;
 let positionX = 12;
 let positionY = 522;
-let bg = bg6;
-let currentBg = bg6;
-let currentBg_ = bg6_1;
-let bg_obj = bg6_obj1;
-let checkpoint = 6;
-let currentEvent = 14;
+let bg = bg1;
+let currentBg = bg1;
+let currentBg_ = bg1_1;
+let bg_obj = bg1_obj1;
+let checkpoint = 1;
+let currentEvent = -1;
 //
 
 let objposX = [];
@@ -90,8 +90,8 @@ let objstatus = false;
 
 let alpha = 0, delta = 0.025;
 let fade_status = false;
-let sword_status = true;
-let gun_status = true;
+let sword_status = false;
+let gun_status = false;
 
 let dialogue_status = false;
 let words = ["sander:โอ้ย...ที่นี่มันที่ไหนเนี่ย ปวดหัวชะมัด", "sander:แปลกมาก ทำไมถึง...จำอะไรไม่ได้เลยล่ะ?"];
@@ -108,7 +108,6 @@ let extra0 = new Image();
 let extra1 = new Image();
 let extra2 = new Image();
 let extra3 = new Image();
-let extra4 = new Image();
 let extrax = [1260, 1614]
 let extray = [390, 132]
 let currentLoopIndex_extra = 0;
@@ -122,10 +121,10 @@ let swordf = new Image();
 let gun = new Image();
 let wormf = new Image();
 let bunchunf = new Image();
-let lefthand = "gun";
-let lefthand_current = "gun";
-let righthand = "sword";
-let righthand_current = "sword";
+let lefthand = undefined;
+let lefthand_current = undefined;
+let righthand = undefined;
+let righthand_current = undefined;
 let playerhit = false;
 let sword_inhand = new Image();
 let gunL = new Image();
@@ -182,9 +181,34 @@ let player_takedmg = false;
 let monster_takedmg = false;
 let bullet_damage = false;
 
+let itemsound = new Audio('sound/Item sound.mp3') 
 let typesound = new Audio('sound/Type sound.mp3')
+let stonestepsound = new Audio('sound/stonestep.mp3')
+let sandstepsound = new Audio('sound/sandstep.mp3')
+let sandstep2sound = new Audio('sound/sandstep2.mp3')
+let sandstep3sound = new Audio('sound/sandstep3.mp3')
+let steelstepsound = new Audio('sound/steelstep.mp3')
+let chickenwalksound = new Audio('sound/chickenwalk.mp3')
 let sandsound = new Audio('sound/Sands of Mystery.mp3')
-let itemsound = new Audio('sound/Item sound.mp3')
+let gunsound = new Audio('sound/lazer.mp3')
+let chargersound = new Audio('sound/charger.mp3')
+let mon4hitsound = new Audio('sound/mon4hit.mp3')
+let mon4diedsound = new Audio('sound/mon4died.mp3') 
+let sabersound = new Audio('sound/lightsaber.mp3')
+let electric1sound = new Audio('sound/electric1.mp3')
+let electric2sound = new Audio('sound/electric2.mp3')
+let electric3sound = new Audio('sound/electric3.mp3')
+let finalfightsound = new Audio('sound/finalfight.mp3')
+let finalfight2sound = new Audio('sound/finalfight2.mp3')
+let minibossendsound = new Audio('sound/minibossend.mp3')
+let deadsound = new Audio('sound/dead.mp3')
+let dead2sound = new Audio('sound/dead2.mp3')
+let wormhitsound = new Audio('sound/wormhit.mp3')
+let wormwalksound = new Audio('sound/wormwalk.mp3')
+let hitsound = new Audio('sound/hit.mp3')
+let spearsound = new Audio('sound/spear.mp3')
+let finalbosswalksound = new Audio('sound/finalbosswalk.mp3')
+let endingsound = new Audio('sound/ending.mp3')
 
 window.addEventListener('keydown', (event) => { keyPresses[event.code] = true; });
 window.addEventListener('keyup', (event) => { keyPresses[event.code] = false; });
@@ -215,7 +239,6 @@ function loadImage() {
     extra1.src = 'https://cdn.discordapp.com/attachments/933591523189215235/977455913755615252/extra1.png'
     extra2.src = 'image/extra2.png'
     extra3.src = 'image/extra3.png'
-    extra4.src = 'image/extra4.png'
 
     bullet_w.src = 'https://cdn.discordapp.com/attachments/812749326543487058/966710007934636062/bullet_w.png'
     bullet_a.src = 'https://cdn.discordapp.com/attachments/812749326543487058/966710008307916820/bullet_a.png'
@@ -445,9 +468,6 @@ function gameLoop() {
     let hasMoved = false;
     playershoot = false;
 
-    document.getElementById("homepage").style.display = "none"
-    document.getElementById("comic-container").style.display = "none"
-
     if (checkpoint == 1) {
         sandsound.play();
         walkCollison(156, 174, 198, 60);
@@ -540,7 +560,7 @@ function gameLoop() {
         if (positionX >= 1770 && positionY > 450 && currentDirection == FACING_RIGHT) {
             positionX = 12
             positionY = 522
-            hp_monster = 5;
+            hp_monster = 150;
             bg = bg4;
             currentBg = bg4;
             currentBg_ = bg4_1;
@@ -585,7 +605,25 @@ function gameLoop() {
     }
 
     if (checkpoint == 5) {
-        walkCollison(0, 0, 0, 0)
+        sandsound.pause();
+        walkCollison(30, 255, 180, 120)
+        walkCollison(1707, 255, 180, 120)
+        walkCollison(240, 165, 1440, 90)
+        walkCollison(12, 1002, 180, 60)
+        walkCollison(225, 1002, 180, 60)
+        walkCollison(438, 1002, 180, 60)
+        walkCollison(651, 1002, 180, 60)
+        walkCollison(864, 1002, 180, 60)
+        walkCollison(1077, 1002, 180, 60)
+        walkCollison(1290, 1002, 180, 60)
+        walkCollison(1503, 1002, 180, 60)
+        walkCollison(1716, 1002, 180, 60)
+        if (hp_monster > 0){
+            finalfight2sound.play();
+        }
+        if (hp_monster <= 0 || hp_sander <= 0){
+            finalfight2sound.pause();
+        }
     }
 
     if (checkpoint == 6) {
@@ -619,6 +657,7 @@ function gameLoop() {
         || (mouseclick && righthand == "sword" && lefthand == "gun" || (keyPresses.Space && righthand == "gun" && lefthand == "sword")))
         && !dialogue_status && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         playerhit = true;
+        sabersound.play();
     }
     if (hp_sander > 0 && ((keyPresses.Space || mouseclick) && ((lefthand == "gun" && righthand == undefined) || (righthand == "gun" && lefthand == undefined))
         || (mouseclick && righthand == "gun" && lefthand == "sword" || (keyPresses.Space && righthand == "sword" && lefthand == "gun")))
@@ -638,9 +677,28 @@ function gameLoop() {
     else {
         sander_current = sander
     }
+    if (hasMoved == true){
+        if (checkpoint == 1 || checkpoint == 2 || checkpoint == 3){
+            sandstepsound.play();
+        }
+        if (checkpoint == 4 || checkpoint == 5 || checkpoint == 6){
+            stonestepsound.play();
+        }
+    }
+    if (hasMoved == false){
+        if (checkpoint == 1 || checkpoint == 2 || checkpoint == 3){
+            sandstepsound.pause();
+        }
+        if (checkpoint == 4 || checkpoint == 5 || checkpoint == 6){
+            stonestepsound.pause();
+        }
+    }
     if ((keyPresses.Space || mouseclick) && energy > 0 && playershoot && !dialogue_status && gun_status
         && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
-        if (energy != 0) { energy -= 1; }
+        if (energy != 0) {
+            energy -= 1;
+            gunsound.play();
+            }
         if (bullet_timer <= 0) {
             bullet_posx = positionX + 78;
             bullet_posy = positionY + 78;
@@ -653,9 +711,13 @@ function gameLoop() {
         bullet_timer -= 1;
     }
     else {
+        gunsound.pause();
         if (energy < 145) {
             energy += 0.5;
         }
+    }
+    if (!fight_status && hp_sander+0.5<=100) {
+        hp_sander += 0.5;
     }
 
     if (!run) {
@@ -794,6 +856,20 @@ function gameLoop() {
             if (currentDirection == FACING_RIGHT) { ctx.drawImage(gun, positionX + 115, positionY + 42, 90, 90) }
             if (currentDirection == FACING_LEFT) { ctx.drawImage(gunL, positionX - 40, positionY + 42, 90, 90) }
         }
+        if (checkpoint == 5 && !fight_status && !bunchun_check) {
+            ctx.drawImage(bunchun, 0, 2 * 512, 512, 512, monster_posx[2], monster_posy[2], 192, 192)
+            monster_action = 4
+        }
+        if (checkpoint == 5 && !fight_status && bunchun_check && positionY + 162 >= monster_posy[2] + 174 + 30) {
+            ctx.drawImage(bunchun, 3 * 512, 7 * 512, 512, 512, monster_posx[2], monster_posy[2], 192, 192)
+        }
+        if (checkpoint == 5 && fight_status && (positionY + 162 >= monster_posy[2] + 174 + 30)) {
+            if (monster_action == 5 && currentLoopIndex_monster >= 3) {
+                ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
+                electric1sound.play();
+            }
+            drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
+        }
         drawFrame(sander_current, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
         if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186 && !dialogue_status) {
             drawFrame(extra0, CYCLE_LOOP[currentLoopIndex_extra], 1, extrax[0], extray[0], 512, 512, 186, 186)
@@ -832,7 +908,16 @@ function gameLoop() {
         drawObj();
         if (checkpoint == 3) {
             ctx.drawImage(extra2, 152, 408, 113, 174)
-            ctx.drawImage(extra4, 0, 0, canvas.width, canvas.height)
+        }
+        if (checkpoint == 5 && !fight_status && bunchun_check && positionY + 162 < monster_posy[2] + 174 + 30) {
+            ctx.drawImage(bunchun, 3 * 512, 7 * 512, 512, 512, monster_posx[2], monster_posy[2], 192, 192)
+        }
+        if (checkpoint == 5 && fight_status && (positionY + 162 < monster_posy[2] + 174 + 30)) {
+            if (monster_action == 5 && currentLoopIndex_monster >= 3) {
+                ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
+                electric1sound.play();
+            }
+            drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
         }
     }
     else if (currentEvent < 4) {
@@ -858,6 +943,9 @@ function gameLoop() {
         }
         if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186 && dialogue_status) {
             ctx.drawImage(extra0, 512, 0, 512, 512, extrax[0], extray[0], 186, 186)
+        }
+        if (checkpoint == 5 && !fight_status && bunchun_check && positionY + 162 < monster_posy[2] + 174 + 30) {
+            ctx.drawImage(bunchun, 3 * 512, 7 * 512, 512, 512, monster_posx[2], monster_posy[2], 192, 192)
         }
     }
     else {
@@ -894,6 +982,7 @@ function gameLoop() {
         if (checkpoint == 5 && fight_status && (positionY + 162 >= monster_posy[2] + 174 + 30)) {
             if (monster_action == 5 && currentLoopIndex_monster >= 3) {
                 ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
+                electric1sound.play();
             }
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
         }
@@ -929,7 +1018,6 @@ function gameLoop() {
             ctx.drawImage(extra2, 152, 408, 113, 174)
         }
         if (checkpoint == 3) {
-            ctx.drawImage(extra4, 0, 0, canvas.width, canvas.height)
             drawFrame(box, CYCLE_LOOP[currentLoopIndex_extra], 0, 262, 380, 68, 68, 68, 68)
             drawExtra()
         }
@@ -943,6 +1031,7 @@ function gameLoop() {
         if (checkpoint == 5 && fight_status && (positionY + 162 < monster_posy[2] + 174 + 30)) {
             if (monster_action == 5 && currentLoopIndex_monster >= 3) {
                 ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
+                electric1sound.play();
             }
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
         }
@@ -1126,18 +1215,34 @@ function gameLoop() {
         if (monster_move && fight_status && monster_posy[0] < positionY) {
             monster_posy[0] += monster_speed;
             monster_action = 2;
+            wormwalksound.play();
+                if (hp_sander <= 0){
+                    wormwalksound.pause();
+                }
         }
         if (monster_move && fight_status && monster_posy[0] > positionY) {
             monster_posy[0] -= monster_speed;
             monster_action = 0;
+            wormwalksound.play();
+                if (hp_sander <= 0){
+                    wormwalksound.pause();
+                }
         }
         if (monster_move && fight_status && monster_posx[0] < positionX && positionY + 81 >= monster_posy[0] && positionY + 81 <= monster_posy[0] + 324) {
             monster_posx[0] += monster_speed / 2;
             monster_action = 1;
+            wormwalksound.play();
+                if (hp_sander <= 0){
+                    wormwalksound.pause();
+                }
         }
         if (monster_move && fight_status && monster_posx[0] > positionX && positionY + 81 >= monster_posy[0] && positionY + 81 <= monster_posy[0] + 324) {
             monster_posx[0] -= monster_speed / 2;
             monster_action = 3
+            wormwalksound.play();
+                if (hp_sander <= 0){
+                    wormwalksound.pause();
+                }
         }
         if (fight_status && Math.abs(((positionX + (162 / 2))) - (monster_posx[0] + (324 / 2))) <= ((162 / 2) + (324 / 2)) - 60 && Math.abs((positionY + (162 / 2)) - (monster_posy[0] + (226.25 / 2))) <= 100) {
             if (monster_move) {
@@ -1149,24 +1254,43 @@ function gameLoop() {
     }
 
     if (checkpoint == 4 && fight_status && hp_monster > 0) {
+        if (hp_sander <= 0){
+            chickenwalksound.pause();
+        }
         monster_speed = 4
         if (monster_move && fight_status && monster_posy[1] + 305 < positionY + 162) {
             monster_posy[1] += monster_speed;
             monster_action = 2;
+            chickenwalksound.play();
+            if (hp_sander <= 0){
+                chickenwalksound.pause();
+            }
         }
         if (monster_move && fight_status && monster_posy[1] + 305 > positionY + 162) {
             monster_posy[1] -= monster_speed;
             monster_action = 0;
+            chickenwalksound.play();
+            if (hp_sander <= 0){
+                chickenwalksound.pause();
+            }
         }
         if (monster_move && fight_status && monster_posx[1] + (324 / 2) < positionX + (162 / 2) && (positionY + 162 >= monster_posy[1] + 305 || positionY <= monster_posy[1] + 162) && !((monster_posx[1] + ((1 / 2) * 324) - 81 < positionX + (162 / 2)) && (monster_posx[1] + ((1 / 2) * 324) + 81 > positionX + (162 / 2)))) {
             if (monster_action == 2 || monster_action == 0) { monster_speed /= Math.sqrt(2) }
             monster_posx[1] += monster_speed;
             monster_action = 1;
+            chickenwalksound.play();
+            if (hp_sander <= 0){
+                chickenwalksound.pause();
+            }
         }
         if (monster_move && fight_status && monster_posx[1] + (324 / 2) > positionX + (162 / 2) && (positionY + 162 >= monster_posy[1] + 305 || positionY <= monster_posy[1] + 162) && !((monster_posx[1] + ((1 / 2) * 324) - 81 < positionX + (162 / 2)) && (monster_posx[1] + ((1 / 2) * 324) + 81 > positionX + (162 / 2)))) {
             if (monster_action == 2 || monster_action == 0) { monster_speed /= Math.sqrt(2) }
             monster_posx[1] -= monster_speed;
             monster_action = 3
+            chickenwalksound.play();
+            if (hp_sander <= 0){
+                chickenwalksound.pause();
+            }
         }
         if (fight_status && temp_x == 0 && temp_y == 0 && (((((positionX + 81) - (monster_posx[1] + 162)) ** 2) + ((positionY + 81) - (monster_posy[1] + 162)) ** 2)) ** 0.5 >= 450) {
             temp_x = positionX + 81 - monster_posx[1] - 162
@@ -1206,22 +1330,41 @@ function gameLoop() {
 
     if (checkpoint == 5 && fight_status && hp_monster > 0) {
         if (bunchun_phase > 1) {
+            if (hp_sander <= 0){
+                steelstepsound.pause();
+            }
             monster_speed = 4;
             if (monster_move && fight_status && monster_posy[2] + 174 < positionY + 162) {
                 monster_posy[2] += monster_speed;
                 monster_action = 2;
+                steelstepsound.play();
+                if (hp_sander <= 0){
+                    steelstepsound.pause();
+                }
             }
             if (monster_move && fight_status && monster_posy[2] + 174 > positionY + 162) {
                 monster_posy[2] -= monster_speed;
                 monster_action = 0;
+                steelstepsound.play();
+                if (hp_sander <= 0){
+                    steelstepsound.pause();
+                }
             }
             if (monster_move && fight_status && monster_posx[2] + (192 / 2) < positionX + (162 / 2) && (positionY + 162 >= monster_posy[2] + 174 || positionY <= monster_posy[2] + 162) && !((monster_posx[2] + ((1 / 2) * 192) - 81 < positionX + (162 / 2)) && (monster_posx[2] + ((1 / 2) * 192) + 81 > positionX + (162 / 2)))) {
                 monster_posx[2] += monster_speed;
                 monster_action = 1;
+                steelstepsound.play();
+                if (hp_sander <= 0){
+                    steelstepsound.pause();
+                }
             }
             if (monster_move && fight_status && monster_posx[2] + (192 / 2) > positionX + (162 / 2) && (positionY + 162 >= monster_posy[2] + 174 || positionY <= monster_posy[2] + 162) && !((monster_posx[2] + ((1 / 2) * 192) - 81 < positionX + (162 / 2)) && (monster_posx[2] + ((1 / 2) * 192) + 81 > positionX + (162 / 2)))) {
                 monster_posx[2] -= monster_speed;
                 monster_action = 3
+                steelstepsound.play();
+                if (hp_sander <= 0){
+                    steelstepsound.pause();
+                }
             }
             if (bunchun_phase == 2 && fight_status && Math.abs((positionX + 81) - (monster_posx[2] + 96)) <= 90 && Math.abs((positionY + 81) - (monster_posy[2] + 96)) <= 100) {
                 if (monster_move) {
@@ -1248,25 +1391,48 @@ function gameLoop() {
     }
 
     if (checkpoint == 6 && fight_status && hp_monster > 0) {
+        if (hp_sander <= 0){
+            finalbosswalksound.pause();
+        }
          monster_speed = 2;
         if (monster_action == 4) {
              monster_move = false;
+             finalbosswalksound.play();
+                if (hp_sander <= 0){
+                    finalbosswalksound.pause();;
+                }
          }
         if (monster_move && fight_status && monster_posy[3] + 180 < positionY + 162) {
             monster_posy[3] += monster_speed;
             monster_action = 2;
+            finalbosswalksound.play();
+                if (hp_sander <= 0){
+                    finalbosswalksound.pause();;
+                }
         }
         if (monster_move && fight_status && monster_posy[3] + 180 > positionY + 162) {
             monster_posy[3] -= monster_speed;
             monster_action = 0;
+            finalbosswalksound.play();
+                if (hp_sander <= 0){
+                    finalbosswalksound.pause();;
+                }
         }
         if (monster_move && fight_status && monster_posx[3] + (360 / 2) < positionX + (162 / 2) && (positionY + 162 >= monster_posy[3] + 360 || positionY <= monster_posy[2] + 162) && !((monster_posx[3] + ((1 / 2) * 360) - 81 < positionX + (162 / 2)) && (monster_posx[3] + ((1 / 2) * 360) + 81 > positionX + (162 / 2)))) {
             monster_posx[3] += monster_speed;
             monster_action = 1;
+            finalbosswalksound.play();
+                if (hp_sander <= 0){
+                    finalbosswalksound.pause();;
+                }
         }
         if (monster_move && fight_status && monster_posx[3] + (360 / 2) > positionX + (162 / 2) && (positionY + 162 >= monster_posy[3] + 360 || positionY <= monster_posy[2] + 162) && !((monster_posx[3] + ((1 / 2) * 360) - 81 < positionX + (162 / 2)) && (monster_posx[3] + ((1 / 2) * 360) + 81 > positionX + (162 / 2)))) {
             monster_posx[3] -= monster_speed;
             monster_action = 3
+            finalbosswalksound.play();
+                if (hp_sander <= 0){
+                    finalbosswalksound.pause();;
+                }
         }
         // if (fight_status && Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 250 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 250) {
         //     monster_move = true
@@ -1282,22 +1448,36 @@ function gameLoop() {
 
     if (fight_status && monster_attack && hp_monster > 0 && hp_sander > 0) {
         if (checkpoint == 2) {
-            if (positionX >= monster_posx[0]) { monster_action = 6 }
-            else { monster_action = 5 }
+            if (positionX >= monster_posx[0]) {
+                 monster_action = 6
+                 wormhitsound.play();
+            }
+            else {
+                 monster_action = 5
+                 wormhitsound.play();
+            }
         }
 
         if (checkpoint == 4) {
             if (fight_status && (monster_action != 5 && monster_action != 6) && Math.abs((positionX + 81) - (monster_posx[1] + 162)) <= 100 && Math.abs((positionY + 40) - (monster_posy[1] + 162)) <= 100) {
                 if (monster_posy[1] + 162 > positionY + 81) {
                     monster_action = 8;
+                    mon4hitsound.play();
                 }
                 else {
                     monster_action = 4;
+                    mon4hitsound.play();
                 }
             }
             else if ((((((posatmx) - (monster_posx[1] + 162)) ** 2) + ((posatmy) - (monster_posy[1] + 162)) ** 2)) ** 0.5 >= 50 && (monster_action != 4 && monster_action != 8)) {
-                if (monster_posx[1] > positionX && monster_action != 6) { monster_action = 5 }
-                else if (monster_posx[1] < positionX && monster_action != 5) { monster_action = 6 }
+                if (monster_posx[1] > positionX && monster_action != 6) {
+                     monster_action = 5
+                     chargersound.play()
+                }
+                else if (monster_posx[1] < positionX && monster_action != 5) {
+                     monster_action = 6
+                     chargersound.play()
+                }
                 monster_posx[1] += temp_x / 25
                 monster_posy[1] += temp_y / 25
             }
@@ -1319,15 +1499,18 @@ function gameLoop() {
                 if (monster_action == 4 || (monster_action != 4 && monster_bulletx >= -100)) { monster_bulletx -= 12 }
                 if ((Math.abs(monster_bulletx - positionX) <= 250) || (monster_action == 5 && monster_bulletx >= -100)) {
                     ctx.drawImage(bunchun_action4, 1 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
+                    electric2sound.play();
                 }
                 if ((Math.abs(monster_bulletx - positionX) <= 150) && monster_bulletx > positionX && monster_bulletx < positionX + 162) {
                     ctx.drawImage(bunchun_action4, 2 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
                     if (positionY + 162 >= 350 + 70 && positionY + 162 <= 350 + 529 - 70 && hp_monster > 0 && hp_sander > 0 && !bunchun_check) {
                         player_takedmg = true;
+                        electric2sound.play();
                     }
                 }
                 else {
                     ctx.drawImage(bunchun_action4, 0 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
+                    electric3sound.play();
                 }
                 if (monster_bulletx <= -100) { monster_bulletx = -100 }
             }
@@ -1382,6 +1565,7 @@ function gameLoop() {
                 if (Math.abs((positionX+81)-(monster_posx[3]-295+180)) <= 420 && Math.abs((positionY+81)-(monster_posy[3]+145+24) <= 55)) {
                     monster_attack = true;
                     player_takedmg = true;
+                    spearsound.play();
                 }
             }
             if (monster_action == 7 && currentLoopIndex_monster >= 3) {
@@ -1389,6 +1573,7 @@ function gameLoop() {
                 if (Math.abs((positionX+81)-(monster_posx[3]+360-295+180)) <= 420 && Math.abs((positionY+81)-(monster_posy[3]+145+24) <= 55)) {
                     monster_attack = true;
                     player_takedmg = true;
+                    spearsound.play();
                 }
             }
             if (monster_action == 6) { // กระโดดใส่
@@ -1428,6 +1613,7 @@ function gameLoop() {
         }
 
         if (monster_takedmg) {
+            hitsound.play();
             if (bullet_damage) {
                 hp_monster -= 0.75;
                 bullet_damage = false;
@@ -1440,10 +1626,21 @@ function gameLoop() {
             if (checkpoint == 5) { drawFrame(bunchun_damage, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192) }
             if (hp_monster <= 0) {
                 currentLoopIndex_monster = 0;
-                if (checkpoint == 2) { monster_action = 4 }
-                if (checkpoint == 4) { monster_action = 7 }
-                if (checkpoint == 5) { monster_action = 7 }
-                if (checkpoint == 6) { monster_action = 8 }
+                if (checkpoint == 2) {
+                     monster_action = 4 
+                }
+                if (checkpoint == 4) {
+                     monster_action = 7
+                     mon4diedsound.play();
+                }
+                if (checkpoint == 5) {
+                     monster_action = 7
+                     minibossendsound.play(); 
+                }
+                if (checkpoint == 6) {
+                     monster_action = 8
+                     endingsound.play();
+                }
             }
             monster_takedmg = false;
         }
@@ -1466,6 +1663,7 @@ function gameLoop() {
         }
 
         if (player_takedmg) {
+            hitsound.play();
             if (checkpoint == 2) { hp_sander -= 0.5 }
             if (checkpoint == 4) {
                 if (monster_action == 4 || monster_action == 8) { hp_sander -= 0.5 }
@@ -1491,6 +1689,8 @@ function gameLoop() {
                 drawFrame(sander_sword_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162)
             }
             if (hp_sander <= 0) {
+                deadsound.play();
+                dead2sound.play();
                 dead_status = true;
                 currentLoopIndex = 0;
                 currentDirection = 4;
