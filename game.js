@@ -32,6 +32,9 @@ let sander_sword_damage = new Image();
 let sander_dia = new Image();
 let extra0_dia = new Image();
 let extra1_dia = new Image();
+let axeon_dia = new Image();
+let bunchun_dia = new Image();
+let mcdo_dia = new Image();
 
 let bullet_posxy = [];
 let bullet_posx = 0;
@@ -87,8 +90,8 @@ let objstatus = false;
 
 let alpha = 0, delta = 0.025;
 let fade_status = false;
-let sword_status = false;
-let gun_status = false;
+let sword_status = true;
+let gun_status = true;
 
 let dialogue_status = false;
 let words = ["sander:โอ้ย...ที่นี่มันที่ไหนเนี่ย ปวดหัวชะมัด", "sander:แปลกมาก ทำไมถึง...จำอะไรไม่ได้เลยล่ะ?"];
@@ -119,10 +122,10 @@ let swordf = new Image();
 let gun = new Image();
 let wormf = new Image();
 let bunchunf = new Image();
-let lefthand = undefined;
-let lefthand_current = undefined;
-let righthand = undefined;
-let righthand_current = undefined;
+let lefthand = "gun";
+let lefthand_current = "gun";
+let righthand = "sword";
+let righthand_current = "sword";
 let playerhit = false;
 let sword_inhand = new Image();
 let gunL = new Image();
@@ -145,6 +148,8 @@ let boss_bullet = boss_bulletd;
 let jumpcheck = false;
 let harpoonr = new Image();
 let harpoonl = new Image();
+let cur_posX = 0;
+let cur_posY = 0;
 
 let fight_status = false;
 let hp_sander = 100;
@@ -198,6 +203,9 @@ function loadImage() {
     sander_dia.src = 'image/sander_dialogue.png';
     extra0_dia.src = 'image/extra0_dialogue.png';
     extra1_dia.src = 'image/extra1_dialogue.png';
+    axeon_dia.src = 'image/axeon_dia.png'
+    bunchun_dia.src = 'image/bunchun_dia.png'
+    mcdo_dia.src = 'image/mcdo_dia.png'
 
     sword_inhand.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972396351449096232/sword_inhand.png'
     gunL.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972396333640085544/gun_inhand_l.png'
@@ -352,6 +360,13 @@ function retry() {
         positionX = 12
         positionY = 522
     }
+    if (checkpoint == 6) {
+        positionX = 12
+        positionY = 522
+        monster_posx[3] = 1500
+        monster_posy[3] = 426
+        hp_monster = 150
+    }
 }
 
 function up() {
@@ -429,6 +444,9 @@ function gameLoop() {
 
     let hasMoved = false;
     playershoot = false;
+
+    document.getElementById("homepage").style.display = "none"
+    document.getElementById("comic-container").style.display = "none"
 
     if (checkpoint == 1) {
         sandsound.play();
@@ -538,7 +556,6 @@ function gameLoop() {
         walkCollison(435, 105, 945, 120)
         walkCollison(1404, 150, 450, 81)
         walkCollison(1404, 228, 450, 120)
-
         walkCollison(1383, 864, 450, 90)
         walkCollison(1383, 930, 450, 90)
         walkCollison(1383, 1002, 450, 90)
@@ -572,11 +589,12 @@ function gameLoop() {
     }
 
     if (checkpoint == 6) {
-        walkCollison(0,0,0,0)
+        walkCollison(21, 150, 1881, 100)
+        walkCollison(21, 282, 600, 100)
+        walkCollison(594, 219, 201, 100)
+        walkCollison(1290, 249, 615, 100)
+        walkCollison(1290, 285, 615, 100)
     }
-
-    document.getElementById("homepage").style.display = "none"
-    document.getElementById("comic-container").style.display = "none"
 
     if ((keyPresses.KeyW || keyPresses.KeyS) && (keyPresses.KeyA || keyPresses.KeyD)) {
         movement_speed /= Math.sqrt(2);
@@ -1054,7 +1072,7 @@ function gameLoop() {
         ctx.drawImage(axeonf, positionX + 144, positionY + 42)
         if (keyPresses.KeyF && currentEvent == 11) {
             dialogue_status = true
-            words = ["แอ็กซีออน:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "แอ็กซีออน:บลาบลาบลาบลาบลา"]
+            words = ["axeon:หยุดก่อน! ที่นี่ไม่อนุญาตให้ใครเข้าไปทั้งนั้น!", "sander:อะไรกัน แกไม่เห็นไก่พวกนี้ที่ยืนประท้วงอยู่ตรงนี้เหรอ", "axeon:ฉันเห็น แล้วมันเกี่ยวอะไรกับฉันล่ะ? หน้าที่ของฉันคือการเฝ้าฐานนี้เท่านั้นแหละ", "sander:ถ้าฉันจะเข้าฐานนั้นไป ก็ต้องข้ามแกไปก่อนสินะ...!"]
             currentEvent = 12
         }
     }
@@ -1065,7 +1083,7 @@ function gameLoop() {
     /* GAME EVENT Bg5 */
     if (currentEvent == 12 && !dialogue_status && checkpoint == 5 && axeon_check) {
         dialogue_status = true
-        words = ["มินิบอส:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "มินิบอส:บลาบลาบลาบลาบลา"]
+        words = ["bunchun:ตายยากจริงๆ เลยนะ แซนเดอร์", "sander:อะไรกัน แกเป็นใคร ทำไมถึงรู้ชื่อฉัน!", "bunchun:เอาชนะฉันและไปพบกับบอสของแกให้ได้สิ เพื่อที่จะได้รู้ความจริงไงล่ะ!"]
         currentEvent = 13
     }
     if (currentEvent == 13 && !dialogue_status) { fight_status = true }
@@ -1083,7 +1101,9 @@ function gameLoop() {
 
     /* GAME EVENT Bg6 */
     if (checkpoint == 6 && currentEvent == 14 && !dialogue_status && !comic) {
-        words = ["boss:บลาบลา", "sander:บลาๆ"];
+        words = ["mcdo:ในที่สุด แกก็กลับมานะเมี้ยว...", "sander:พูดเรื่องอะไรของแก", "mcdo:อย่าบอกนะว่าแกยังจำไม่ได้อีกน่ะ", "mcdo:แกน่ะเคยเป็นเพื่อนคนสนิทและเป็น<br>บุคคลสำคัญของที่นี่มาก่อนเลยนะ",
+        "mcdo:แต่แกดันคิดจะทรยศฉัน จะหุบยานอวกาศ<br>และข้อมูลทุกอย่างไว้เองคนเดียว!", "mcdo:ดีนะที่ฉันจับแผนบ้าๆ ของแกได้ก่อน", "mcdo:ฉันเลยจัดการลบความทรงจำแก<br>และเอาแกไปทิ้งไว้ในทะเลทรายยังไงล่ะ",
+        "sander:ไม่ต้องบอกก็รู้ ว่าแกคือคนที่อยู่เบื้องหลัง<br>เรื่องราวทั้งหมดนี่!"];
         dialogue_status = true;
         currentEvent = 15
         monster_action = 0;
@@ -1299,7 +1319,7 @@ function gameLoop() {
                 }
                 if ((Math.abs(monster_bulletx - positionX) <= 150) && monster_bulletx > positionX && monster_bulletx < positionX + 162) {
                     ctx.drawImage(bunchun_action4, 2 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
-                    if (positionY + 162 >= 350 + 70 && positionY + 162 <= 350 + 529 - 70 && hp_monster > 0 && hp_sander > 0) {
+                    if (positionY + 162 >= 350 + 70 && positionY + 162 <= 350 + 529 - 70 && hp_monster > 0 && hp_sander > 0 && !bunchun_check) {
                         player_takedmg = true;
                     }
                 }
@@ -1311,14 +1331,14 @@ function gameLoop() {
         }
 
         if (checkpoint == 6) {
-            if ((positionY <= monster_posy[3] + 240 && positionY >= monster_posy[3]) && (positionX <= monster_posx[3] + 720 && positionX >= monster_posx[3] - 360)) { //harpoon
-                if (positionX < monster_posx[3]) { monster_action = 5 }
+            if ((positionY <= monster_posy[3] + 240 && positionY >= monster_posy[3]-50) && (positionX <= monster_posx[3] + 640 && positionX >= monster_posx[3] - 360)) { //harpoon
+                if (positionX+81 < monster_posx[3]+180) { monster_action = 5 }
                 else { monster_action = 7 }
             }
-            else if ((positionY <= monster_posy[3] + 240 && positionY >= monster_posy[3]) && (positionX > monster_posx[3] + 720 || positionX < monster_posx[3] - 360)) { // missile
+            else if ((positionY <= monster_posy[3] + 240 && positionY >= monster_posy[3]-30) && (positionX > monster_posx[3] + 640 || positionX < monster_posx[3] - 360)) { // missile
                 monster_action = 4
             }
-            else if ((positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3]) && (positionY > monster_posy[3] + 240 || positionY < monster_posy[3])) { // missile
+            else if ((positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3]) && (positionY > monster_posy[3] + 240 || positionY < monster_posy[3]-30)) { // missile
                 monster_action = 4
             }
             else {
@@ -1333,16 +1353,16 @@ function gameLoop() {
                 if (monster_bullet_timer <= 0) {
                     monster_bulletx = monster_posx[3] + 78;
                     monster_bullety = monster_posy[3] + 78;
-                    if (positionX >= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3])) {
+                    if (positionX >= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3]-30)) {
                         monster_bullet_posxy.push([monster_bulletx - 156, monster_bullety - 78, "right", 0])
                     }
-                    else if (positionX <= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3])) {
+                    else if (positionX <= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3]-30)) {
                         monster_bullet_posxy.push([monster_bulletx, monster_bullety - 78, "left", 0])
                     }
-                    else if (positionY >= monster_posy[3] && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
+                    else if (positionY >= monster_posy[3]-30 && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
                         monster_bullet_posxy.push([monster_bulletx + 78, monster_bullety - 162, "up", 0])
                     }
-                    else if (positionY <= monster_posy[3] && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
+                    else if (positionY <= monster_posy[3]-30 && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
                         monster_bullet_posxy.push([monster_bulletx + 78, monster_bullety, "down", 0])
                     }
                     else {
@@ -1352,9 +1372,22 @@ function gameLoop() {
                     monster_bullet_timer = delay;
                 }
                 monster_bullet_timer -= 1;
+                monster_action = 6
             }
-            if (monster_action == 5 && currentLoopIndex_monster >= 3) { ctx.drawImage(harpoonr, monster_posx[3]-295, monster_posy[3]+145, 360, 48) }
-            if (monster_action == 7 && currentLoopIndex_monster >= 3) { ctx.drawImage(harpoonl, monster_posx[3]+295, monster_posy[3]+145, 360, 48) }
+            if (monster_action == 5 && currentLoopIndex_monster >= 3) {
+                ctx.drawImage(harpoonr, monster_posx[3]-295, monster_posy[3]+145, 360, 48)
+                if (Math.abs((positionX+81)-(monster_posx[3]-295+180)) <= 420 && Math.abs((positionY+81)-(monster_posy[3]+145+24) <= 55)) {
+                    monster_attack = true;
+                    player_takedmg = true;
+                }
+            }
+            if (monster_action == 7 && currentLoopIndex_monster >= 3) {
+                ctx.drawImage(harpoonl, monster_posx[3]+295, monster_posy[3]+145, 360, 48)
+                if (Math.abs((positionX+81)-(monster_posx[3]+360-295+180)) <= 420 && Math.abs((positionY+81)-(monster_posy[3]+145+24) <= 55)) {
+                    monster_attack = true;
+                    player_takedmg = true;
+                }
+            }
             if (monster_action == 6) { // กระโดดใส่
                 temp_x = cur_posX + 81 - monster_posx[3] - 78
                 temp_y = cur_posY + 81 - monster_posy[3] - 78
@@ -1373,15 +1406,19 @@ function gameLoop() {
 
         /* ตีเข้ามอน */
         if (fight_status && hp_monster > 0 && hp_sander > 0 && playerhit && currentLoopIndex >= 2 && currentLoopIndex <= 3) {
-            if ((Math.abs(((positionX + (162 / 2))) - (monster_posx[0] + (324 / 2))) <= ((162 / 2) + (324 / 2)) - 60 && Math.abs((positionY + (162 / 2)) - (monster_posy[0] + (226.25 / 2))) <= 100) ||
-                (Math.abs((positionX + 81) - (monster_posx[1] + 162)) <= 100 && Math.abs((positionY + 40) - (monster_posy[1] + 162)) <= 100) ||
-                (Math.abs((positionX + 81) - (monster_posx[2] + 96)) <= 350 && Math.abs((positionY + 81) - (monster_posy[2] + 96)) <= 100)) {
+            if ((Math.abs(((positionX + (162 / 2))) - (monster_posx[0] + (324 / 2))) <= ((162 / 2) + (324 / 2)) - 60 && Math.abs((positionY + (162 / 2)) - (monster_posy[0] + (226.25 / 2))) <= 100 && (checkpoint != 6)) ||
+                (Math.abs((positionX + 81) - (monster_posx[1] + 162)) <= 100 && Math.abs((positionY + 40) - (monster_posy[1] + 162)) <= 100 && (checkpoint != 6)) ||
+                (Math.abs((positionX + 81) - (monster_posx[2] + 96)) <= 350 && Math.abs((positionY + 81) - (monster_posy[2] + 96)) <= 100 && (checkpoint != 6)) ||
+                (Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 200 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 200 && positionY+162 <= monster_posy[3]+162+60 )) {
                 if (((monster_posy[0] < positionY && currentDirection == FACING_UP) || (monster_posy[1] < positionY && currentDirection == FACING_UP)) ||
                     ((monster_posy[0] > positionY && currentDirection == FACING_DOWN) || (monster_posy[1] > positionY && currentDirection == FACING_DOWN)) ||
                     ((monster_posx[0] < positionX && currentDirection == FACING_LEFT) || (monster_posx[1] < positionX && currentDirection == FACING_LEFT)) ||
                     ((monster_posx[0] > positionX && currentDirection == FACING_RIGHT) || (monster_posx[1] > positionX && currentDirection == FACING_RIGHT)) ||
                     (monster_posy[2] < positionY && currentDirection == FACING_UP) || (monster_posy[2] > positionY && currentDirection == FACING_DOWN) ||
                     (monster_posx[2] < positionX && currentDirection == FACING_LEFT) || monster_posx[2] > positionX && currentDirection == FACING_RIGHT) {
+                        monster_takedmg = true
+                } 
+                if(checkpoint == 6){  
                     monster_takedmg = true
                 }
             }
@@ -1434,11 +1471,20 @@ function gameLoop() {
                 if (monster_action == 4) { hp_sander -= 2 }
                 if (monster_action == 5) { hp_sander -= 1.5 }
             }
+            if (checkpoint == 6) {
+                if (monster_action == 4) { hp_sander -= 1 }
+                if (monster_action == 5 || monster_action == 7) {
+                    hp_sander -= 1.5
+                    if (hp_monster+1.5<=150) {
+                        hp_monster += 1.5;
+                    }
+                }
+            }
             if (sander_current == sander) {
-                drawFrame(sander_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
+                drawFrame(sander_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162)
             }
             if (sander_current == sander_sword) {
-                drawFrame(sander_sword_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
+                drawFrame(sander_sword_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162)
             }
             if (hp_sander <= 0) {
                 dead_status = true;
@@ -1549,6 +1595,7 @@ function drawBlood() {
     if (checkpoint == 2) { drawStroked("เดอะ ดวนนี่ หนอนยักษ์ดึ้บดึ้บ", "30px", 6, 500, 910) }
     if (checkpoint == 4) { drawStroked("แอ็กซีออนที่ 10 ผู้อารักขาฐานลับ", "30px", 6, 500, 910) }
     if (checkpoint == 5) { drawStroked("เดอะ บุนชุน โคชุ อัศวินเกราะเคลือบเผ็ด", "30px", 6, 500, 910) }
+    if (checkpoint == 6) { drawStroked("โรโนลด์ แมคโดโนลด์", "30px", 6, 500, 910) }
     ctx.fillStyle = "white"
     ctx.fillRect(500, 932, 901, 44)
     ctx.fillStyle = "black"
@@ -1607,18 +1654,20 @@ function drawWeapon(x, y) {
 
 function drawBulletMonster() {
     for (let i = 0; i < monster_bullet_posxy.length; i++) {
-        // if (fight_status) {
-        //     if (checkpoint == 4 && Math.abs((bullet_posxy[i][0] + 81) - (monster_posx[1] + 162)) <= 50 && Math.abs((bullet_posxy[i][1] + 81) - (monster_posy[1] + 162)) <= 100) {
-        //         monster_attack = true
-        //         monster_takedmg = true
-        //         bullet_damage = true
-        //     }
-        //     if (checkpoint == 5 && Math.abs((bullet_posxy[i][0] + 81) - (monster_posx[2] + 96)) <= 50 && Math.abs((bullet_posxy[i][1] + 81) - (monster_posy[2] + 96)) <= 100) {
-        //         monster_attack = true
-        //         monster_takedmg = true
-        //         bullet_damage = true
-        //     }
-        // }
+        if (fight_status) {
+            if (monster_bullet_posxy[i][2] == "left" || monster_bullet_posxy[i][2] == "right") {
+                if (Math.abs((positionX+81)-(monster_bullet_posxy[i][0]+80)) <= 100 && Math.abs((positionY+81)-(monster_bullet_posxy[i][1]+32)) <= 100) {
+                    monster_attack = true
+                    player_takedmg = true
+                }
+            }
+            if (monster_bullet_posxy[i][2] == "up" || monster_bullet_posxy[i][2] == "down") {
+                if (Math.abs((positionX+81)-(monster_bullet_posxy[i][0]+32)) <= 150 && Math.abs((positionY+81)-(monster_bullet_posxy[i][1]-32)) <= 150) {
+                    monster_attack = true
+                    player_takedmg = true
+                }
+            }
+        }
         if (monster_bullet_posxy[i][1] <= 0) {
             monster_bullet_posxy.splice(i, 1);
             i--;
@@ -1735,10 +1784,19 @@ function dialogue() {
             ctx.drawImage(sander_dia, (myCanvas.width / 2) - (sander_dia.width / 2), 685, sander_dia.width, sander_dia.height);
         }
         if (words[words_index].slice(0, words[words_index].indexOf(":")) == "soldier") {
-            ctx.drawImage(extra0_dia, (myCanvas.width / 2) - (sander_dia.width / 2), 685, sander_dia.width, sander_dia.height);
+            ctx.drawImage(extra0_dia, (myCanvas.width / 2) - (extra0_dia.width / 2), 685, extra0_dia.width, extra0_dia.height);
         }
         if (words[words_index].slice(0, words[words_index].indexOf(":")) == "hadao") {
-            ctx.drawImage(extra1_dia, (myCanvas.width / 2) - (sander_dia.width / 2), 685, sander_dia.width, sander_dia.height);
+            ctx.drawImage(extra1_dia, (myCanvas.width / 2) - (extra1_dia.width / 2), 685, extra1_dia.width, extra1_dia.height);
+        }
+        if (words[words_index].slice(0, words[words_index].indexOf(":")) == "axeon") {
+            ctx.drawImage(axeon_dia, (myCanvas.width / 2) - (axeon_dia.width / 2), 685, axeon_dia.width, axeon_dia.height);
+        }
+        if (words[words_index].slice(0, words[words_index].indexOf(":")) == "bunchun") {
+            ctx.drawImage(bunchun_dia, (myCanvas.width / 2) - (bunchun_dia.width / 2), 685, bunchun_dia.width, bunchun_dia.height);
+        }
+        if (words[words_index].slice(0, words[words_index].indexOf(":")) == "mcdo") {
+            ctx.drawImage(mcdo_dia, (myCanvas.width / 2) - (mcdo_dia.width / 2) - 50, 685, mcdo_dia.width, mcdo_dia.height);
         }
         if (count + 1 < words[words_index].length) { count++ }
         ctx.fillStyle = "white"
