@@ -55,23 +55,27 @@ let bg3_1 = new Image();
 let bg4 = new Image();
 let bg5 = new Image();
 let bg5_1 = new Image();
+let bg6 = new Image();
+let bg6_1 = new Image();
+let bg6_dark = new Image();
 
 let bg1_obj1 = new Image();
 let bg2_obj1 = new Image();
 let bg3_obj1 = new Image();
 let bg5_obj1 = new Image();
+let bg6_obj1 = new Image();
 
 //เปลี่ยนตรงนี้เพื่อวาร์ป
 let run = true;
 let comic = false;
 let positionX = 12;
 let positionY = 522;
-let bg = bg5;
-let currentBg = bg5;
-let currentBg_ = bg5_1;
-let bg_obj = bg5_obj1;
-let checkpoint = 5;
-let currentEvent = 12;
+let bg = bg6;
+let currentBg = bg6;
+let currentBg_ = bg6_1;
+let bg_obj = bg6_obj1;
+let checkpoint = 6;
+let currentEvent = 14;
 //
 
 let objposX = [];
@@ -130,6 +134,13 @@ let bunchun = new Image();
 let bunchun_damage = new Image();
 let bunchun_action4 = new Image();
 let bunchun_zeri = new Image();
+let mcdo = new Image();
+let boss_bulletr = new Image();
+let boss_bulletl = new Image();
+let boss_bulletu = new Image();
+let boss_bulletd = new Image();
+let boss_bullet = boss_bulletd;
+let jumpcheck = false;
 
 let fight_status = false;
 let hp_sander = 100;
@@ -140,15 +151,18 @@ const CYCLE_LOOP_MONSTER = [0, 1, 2, 3, 3];
 let monster_action = 0;
 let monster_speed = 3;
 let bunchun_phase = 1;
-let monster_posx = [1556, 1150, 1596];
-let monster_posy = [80, 402, 522];
+let monster_posx = [1556, 1150, 1596, 1500];
+let monster_posy = [80, 402, 522, 426];
 let monster_bulletx = -100;
+let monster_bullety = 0;
+let monster_bullet_posxy = []
 let frameCount_monster = 0;
 let monster_move = true;
 let monster_attack = false;
 let worm_check = false;
 let axeon_check = true;
 let bunchun_check = false;
+let mcdo_check = false;
 let dead_status = false;
 let temp_x = 0;
 let temp_y = 0;
@@ -204,6 +218,10 @@ function loadImage() {
     bg4.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968922735940075612/bg4.jpg'
     bg5.src = 'https://cdn.discordapp.com/attachments/812749326543487058/966711169886863410/bg5.jpg'
     bg5_1.src = 'https://cdn.discordapp.com/attachments/812749326543487058/966711170138525767/bg5_1.jpg'
+    bg6.src = 'image/bg6.jpg'
+    bg6_1.src = 'image/bg6_1.jpg'
+    bg6_obj1.src = 'image/bg6_obj1.png'
+    bg6_dark.src = 'image/bg6_dark.png'
 
     bg1_obj1.src = 'https://cdn.discordapp.com/attachments/812749326543487058/966712026724438026/bg1_obj1.png';
     bg2_obj1.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968912908018917416/bg2_obj1.png'
@@ -228,6 +246,11 @@ function loadImage() {
     bunchun_damage.src = 'image/miniboss_damage.png'
     bunchun_action4.src = 'https://cdn.discordapp.com/attachments/933591523189215235/971421292895043634/miniboss_action4.png'
     bunchun_zeri.src = 'https://cdn.discordapp.com/attachments/933591523189215235/977636140200898610/miniboss_zeri.png'
+    mcdo.src = 'image/mcdo.png'
+    boss_bulletr.src = 'image/boss_bulletr.png';
+    boss_bulletl.src = 'image/boss_bulletl.png';
+    boss_bulletu.src = 'image/boss_bulletu.png';
+    boss_bulletd.src = 'image/boss_bulletd.png';
 }
 
 function leftsword() {
@@ -537,12 +560,13 @@ function gameLoop() {
         }
     }
 
+    if (checkpoint == 6) {
+        walkCollison(0,0,0,0)
+    }
+
     document.getElementById("homepage").style.display = "none"
     document.getElementById("comic-container").style.display = "none"
 
-    if (checkpoint == 6) {
-        walkCollison(0, 0, 0, 0)
-    }
     if ((keyPresses.KeyW || keyPresses.KeyS) && (keyPresses.KeyA || keyPresses.KeyD)) {
         movement_speed /= Math.sqrt(2);
     }
@@ -616,7 +640,17 @@ function gameLoop() {
     if (comic && (keyPresses.Space || mouseclick) && currentEvent == -1) { currentEvent = 0 }
     if (comic && (keyPresses.Space || mouseclick) && currentEvent == 8) { currentEvent = 9 }
     if (comic && (keyPresses.Space || mouseclick) && currentEvent == 10) { currentEvent = 11 }
-    if (comic && (keyPresses.Space || mouseclick) && currentEvent == 13) { currentEvent = 14 }
+    if (comic && (keyPresses.Space || mouseclick) && currentEvent == 13) {
+        currentEvent = 14
+        positionX = 12
+        positionY = 522
+        hp_monster = 150;
+        bg = bg6;
+        currentBg = bg6;
+        currentBg_ = bg6_1;
+        bg_obj = bg6_obj1;
+        checkpoint = 6
+    }
     if (!keyPresses.Space && !mouseclick && (currentEvent == 0 || currentEvent == 9 || currentEvent == 11 || currentEvent == 14) && comic) {
         document.getElementById("homepage").style.display = "none"
         document.getElementById("comic-container").style.animationName = "comic"
@@ -690,60 +724,60 @@ function gameLoop() {
         bg = currentBg_;
         drawBg();
         drawBullet();
-        if (checkpoint == 1 && currentEvent < 2 && extrax[0] != -162 && positionY+162 >= extray[0]+186) {
+        if (checkpoint == 1 && currentEvent < 2 && extrax[0] != -162 && positionY + 162 >= extray[0] + 186) {
             ctx.drawImage(extra0, 0, 0, 512, 512, extrax[0], extray[0], 186, 186)
         }
-        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY+162 >= extray[0]+186 && !dialogue_status) {
+        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY + 162 >= extray[0] + 186 && !dialogue_status) {
             drawFrame(extra0, CYCLE_LOOP[currentLoopIndex_extra], 1, extrax[0], extray[0], 512, 512, 186, 186)
         }
-        if (currentEvent >= 2 && extrax[0] != -162 && positionY+162 >= extray[0]+186 && dialogue_status) {
+        if (currentEvent >= 2 && extrax[0] != -162 && positionY + 162 >= extray[0] + 186 && dialogue_status) {
             ctx.drawImage(extra0, 512, 0, 512, 512, extrax[0], extray[0], 186, 186)
         }
-        if (currentEvent >= 4 && currentEvent < 7 && positionY+162 >= extray[1]+174) {
+        if (currentEvent >= 4 && currentEvent < 7 && positionY + 162 >= extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 3, extrax[1], extray[1], 512, 512, 186, 186)
         }
         if (currentEvent == 5 && !dialogue_status && !inventory.includes("sword") && positionY + 162 >= 162 + 120) { ctx.drawImage(sword, 1140, 162, 96, 120) }
-        if (currentEvent == 7 && positionY+162 >= extray[1]+174) {
+        if (currentEvent == 7 && positionY + 162 >= extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 2, extrax[1], extray[1], 512, 512, 186, 186)
         }
-        if (currentEvent == 8 && positionY+162 >= extray[1]+174) {
+        if (currentEvent == 8 && positionY + 162 >= extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 1, extrax[1], extray[1], 512, 512, 186, 186)
         }
         if (fight_status && checkpoint == 2 && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
         if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
-        if (checkpoint == 3 && positionY+162 < canvas.height-270) { ctx.drawImage(extra3, 0, canvas.height-270, 1920, 270) }
+        if (checkpoint == 3 && positionY + 162 < canvas.height - 270) { ctx.drawImage(extra3, 0, canvas.height - 270, 1920, 270) }
         if (sander_current == sander_weapon) {
             if (currentDirection == FACING_RIGHT) { ctx.drawImage(gun, positionX + 115, positionY + 42, 90, 90) }
             if (currentDirection == FACING_LEFT) { ctx.drawImage(gunL, positionX - 40, positionY + 42, 90, 90) }
         }
         drawFrame(sander_current, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
-        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY+162 < extray[0]+186 && !dialogue_status) {
+        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186 && !dialogue_status) {
             drawFrame(extra0, CYCLE_LOOP[currentLoopIndex_extra], 1, extrax[0], extray[0], 512, 512, 186, 186)
         }
-        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY+162 < extray[0]+186 && dialogue_status) {
+        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186 && dialogue_status) {
             ctx.drawImage(extra0, 512, 0, 512, 512, extrax[0], extray[0], 186, 186)
         }
         if (currentEvent == 5 && !dialogue_status && !inventory.includes("sword") && positionY + 162 < 162 + 120) { ctx.drawImage(sword, 1140, 162, 96, 120) }
-        if (checkpoint == 1 && currentEvent < 2 && extrax[0] != -162 && positionY+162 < extray[0]+186) { ctx.drawImage(extra0, 0, 0, 512, 512, extrax[0], extray[0], 186, 186) }
+        if (checkpoint == 1 && currentEvent < 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186) { ctx.drawImage(extra0, 0, 0, 512, 512, extrax[0], extray[0], 186, 186) }
         if (currentEvent < 4) {
             ctx.drawImage(extra1, 0, 0, 512, 512, extrax[1], extray[1], 186, 186)
         }
-        if (currentEvent >= 4 && currentEvent < 7 && positionY+162 < extray[1]+174) {
+        if (currentEvent >= 4 && currentEvent < 7 && positionY + 162 < extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 3, extrax[1], extray[1], 512, 512, 186, 186)
         }
-        if (currentEvent == 7 && positionY+162 < extray[1]+174) {
+        if (currentEvent == 7 && positionY + 162 < extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 2, extrax[1], extray[1], 512, 512, 186, 186)
         }
-        if (currentEvent == 8 && positionY+162 < extray[1]+174) {
+        if (currentEvent == 8 && positionY + 162 < extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 1, extrax[1], extray[1], 512, 512, 186, 186)
         }
         if (fight_status && checkpoint == 2 && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
         if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
-        if (checkpoint == 3 && positionY+162 >= canvas.height-270) { ctx.drawImage(extra3, 0, canvas.height-270, 1920, 270) }
+        if (checkpoint == 3 && positionY + 162 >= canvas.height - 270) { ctx.drawImage(extra3, 0, canvas.height - 270, 1920, 270) }
         drawObj();
         if (checkpoint == 3) {
             ctx.drawImage(extra2, 152, 408, 113, 174)
@@ -754,11 +788,11 @@ function gameLoop() {
         bg = currentBg_;
         drawBg();
         ctx.drawImage(extra1, 0, 0, 512, 512, extrax[1], extray[1], 186, 186)
-        if (checkpoint == 1 && currentEvent < 2 && extrax[0] != -162 && positionY+162 >= extray[0]+186) { ctx.drawImage(extra0, 0, 0, 512, 512, extrax[0], extray[0], 186, 186) }
-        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY+162 >= extray[0]+186 && !dialogue_status) {
+        if (checkpoint == 1 && currentEvent < 2 && extrax[0] != -162 && positionY + 162 >= extray[0] + 186) { ctx.drawImage(extra0, 0, 0, 512, 512, extrax[0], extray[0], 186, 186) }
+        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY + 162 >= extray[0] + 186 && !dialogue_status) {
             drawFrame(extra0, CYCLE_LOOP[currentLoopIndex_extra], 1, extrax[0], extray[0], 512, 512, 186, 186)
         }
-        if (currentEvent >= 2 && extrax[0] != -162 && positionY+162 >= extray[0]+186 && dialogue_status) {
+        if (currentEvent >= 2 && extrax[0] != -162 && positionY + 162 >= extray[0] + 186 && dialogue_status) {
             ctx.drawImage(extra0, 512, 0, 512, 512, extrax[0], extray[0], 186, 186)
         }
         drawObj()
@@ -767,11 +801,11 @@ function gameLoop() {
             if (currentDirection == FACING_LEFT) { ctx.drawImage(gunL, positionX - 40, positionY + 42, 90, 90) }
         }
         drawFrame(sander_current, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
-        if (checkpoint == 1 && currentEvent < 2 && extrax[0] != -162 && positionY+162 < extray[0]+186) { ctx.drawImage(extra0, 0, 0, 512, 512, extrax[0], extray[0], 186, 186) }
-        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY+162 < extray[0]+186 && !dialogue_status) {
+        if (checkpoint == 1 && currentEvent < 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186) { ctx.drawImage(extra0, 0, 0, 512, 512, extrax[0], extray[0], 186, 186) }
+        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186 && !dialogue_status) {
             drawFrame(extra0, CYCLE_LOOP[currentLoopIndex_extra], 1, extrax[0], extray[0], 512, 512, 186, 186)
         }
-        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY+162 < extray[0]+186 && dialogue_status) {
+        if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186 && dialogue_status) {
             ctx.drawImage(extra0, 512, 0, 512, 512, extrax[0], extray[0], 186, 186)
         }
     }
@@ -779,26 +813,26 @@ function gameLoop() {
         bg = currentBg;
         drawBg();
         drawBullet();
-        if (currentEvent >= 4 && currentEvent < 7 && positionY+162 >= extray[1]+174) {
+        if (currentEvent >= 4 && currentEvent < 7 && positionY + 162 >= extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 3, extrax[1], extray[1], 512, 512, 186, 186)
         }
         if (currentEvent == 5 && !dialogue_status && !inventory.includes("sword") && positionY + 162 >= 162 + 120) {
             ctx.drawImage(sword, 1140, 162, 96, 120)
         }
-        if (currentEvent == 7 && positionY+162 >= extray[1]+174) {
+        if (currentEvent == 7 && positionY + 162 >= extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 2, extrax[1], extray[1], 512, 512, 186, 186)
         }
-        if (currentEvent == 8 && positionY+162 >= extray[1]+174) {
+        if (currentEvent == 8 && positionY + 162 >= extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 1, extrax[1], extray[1], 512, 512, 186, 186)
         }
         if (fight_status && checkpoint == 2 && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
         if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
-        if (checkpoint == 3 && positionY+162 >= 408+174) {
+        if (checkpoint == 3 && positionY + 162 >= 408 + 174) {
             ctx.drawImage(extra2, 152, 408, 113, 174)
         }
-        if (checkpoint == 3 && positionY+162 < canvas.height-270) { ctx.drawImage(extra3, 0, canvas.height-270, 1920, 270) }
+        if (checkpoint == 3 && positionY + 162 < canvas.height - 270) { ctx.drawImage(extra3, 0, canvas.height - 270, 1920, 270) }
         if (checkpoint == 4 && !axeon_check && !fight_status && (positionY + 162 >= monster_posy[1] + 300)) {
             ctx.drawImage(axeon, 0 * 512, 3 * 512, 512, 512, monster_posx[1], monster_posy[1], 324, 324)
         }
@@ -817,32 +851,39 @@ function gameLoop() {
         }
         if (checkpoint == 5 && fight_status && (positionY + 162 >= monster_posy[2] + 174 + 30)) {
             if (monster_action == 5 && currentLoopIndex_monster >= 3) {
-                ctx.drawImage(bunchun_zeri, monster_posx[2]-100, monster_posy[2], 395, 192)
+                ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
             }
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
+        }
+        if (checkpoint == 6 && !fight_status && !mcdo_check) {
+            ctx.drawImage(mcdo, 0, 2 * 512, 512, 512, monster_posx[3], monster_posy[3], 360, 360)
+        }
+        if (checkpoint == 6 && fight_status && (positionY + 162 >= monster_posy[3] + 360 - 30)) {
+            drawFrame(mcdo, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[3], monster_posy[3], 512, 512, 360, 360);
         }
         if (sander_current == sander_weapon) {
             if (currentDirection == FACING_RIGHT) { ctx.drawImage(gun, positionX + 115, positionY + 42, 90, 90) }
             if (currentDirection == FACING_LEFT) { ctx.drawImage(gunL, positionX - 40, positionY + 42, 90, 90) }
         }
         drawFrame(sander_current, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
-        if (currentEvent >= 4 && currentEvent < 7 && positionY+162 < extray[1]+174) {
+        drawBulletMonster();
+        if (currentEvent >= 4 && currentEvent < 7 && positionY + 162 < extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 3, extrax[1], extray[1], 512, 512, 186, 186)
         }
         if (currentEvent == 5 && !dialogue_status && !inventory.includes("sword") && positionY + 162 < 162 + 120) {
             ctx.drawImage(sword, 1140, 162, 96, 120)
         }
-        if (currentEvent == 7 && positionY+162 < extray[1]+174) {
+        if (currentEvent == 7 && positionY + 162 < extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 2, extrax[1], extray[1], 512, 512, 186, 186)
         }
-        if (currentEvent == 8 && positionY+162 < extray[1]+174) {
+        if (currentEvent == 8 && positionY + 162 < extray[1] + 174) {
             drawFrame(extra1, CYCLE_LOOP[currentLoopIndex_extra], 1, extrax[1], extray[1], 512, 512, 186, 186)
         }
         if (fight_status && checkpoint == 2 && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
         if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
-        if (checkpoint == 3 && positionY+162 < 408+174) {
+        if (checkpoint == 3 && positionY + 162 < 408 + 174) {
             ctx.drawImage(extra2, 152, 408, 113, 174)
         }
         if (checkpoint == 3) {
@@ -850,7 +891,7 @@ function gameLoop() {
             drawFrame(box, CYCLE_LOOP[currentLoopIndex_extra], 0, 262, 380, 68, 68, 68, 68)
             drawExtra()
         }
-        if (checkpoint == 3 && positionY+162 >= canvas.height-270) { ctx.drawImage(extra3, 0, canvas.height-270, 1920, 270) }
+        if (checkpoint == 3 && positionY + 162 >= canvas.height - 270) { ctx.drawImage(extra3, 0, canvas.height - 270, 1920, 270) }
         // if (checkpoint == 3 && positionX >= 128 && positionX <= 230 && positionY >= 320 && positionY <= 540) {
         //     drawFrame(box, CYCLE_LOOP[currentLoopIndex_extra], 0, 255, 415, 68, 68, 68, 68)
         // }
@@ -868,10 +909,14 @@ function gameLoop() {
         }
         if (checkpoint == 5 && fight_status && (positionY + 162 < monster_posy[2] + 174 + 30)) {
             if (monster_action == 5 && currentLoopIndex_monster >= 3) {
-                ctx.drawImage(bunchun_zeri, monster_posx[2]-100, monster_posy[2], 395, 192)
+                ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
             }
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
         }
+        if (checkpoint == 6 && fight_status && (positionY + 162 < monster_posy[3] + 360 - 30)) {
+            drawFrame(mcdo, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[3], monster_posy[3], 512, 512, 360, 360);
+        }
+        ctx.drawImage(bg6_dark, 0, 0, canvas.width, canvas.height);
     }
 
     if (fight_status) {
@@ -991,25 +1036,25 @@ function gameLoop() {
         document.getElementById("comic-container").style.animationDuration = "8s"
     }
     if (checkpoint == 4 && positionX >= 990 && positionX <= 1150 && positionY >= 400 && positionY <= 565 && currentEvent == 11 && !dialogue_status && !axeon_check) {
-         ctx.drawImage(axeonf, positionX + 144, positionY + 42)
-         if (keyPresses.KeyF && currentEvent == 11) {
-             dialogue_status = true
-             words = ["แอ็กซีออน:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "แอ็กซีออน:บลาบลาบลาบลาบลา"]
-             currentEvent = 12
-         }
-     }
-     if (currentEvent == 12 && !dialogue_status && positionX >= 990 && positionX <= 1150 && !axeon_check) {
-         fight_status = true;
-     }
+        ctx.drawImage(axeonf, positionX + 144, positionY + 42)
+        if (keyPresses.KeyF && currentEvent == 11) {
+            dialogue_status = true
+            words = ["แอ็กซีออน:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "แอ็กซีออน:บลาบลาบลาบลาบลา"]
+            currentEvent = 12
+        }
+    }
+    if (currentEvent == 12 && !dialogue_status && positionX >= 990 && positionX <= 1150 && !axeon_check) {
+        fight_status = true;
+    }
 
     /* GAME EVENT Bg5 */
-     if (currentEvent == 12 && !dialogue_status && checkpoint == 5 && axeon_check) {
-         dialogue_status = true
-         words = ["มินิบอส:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "มินิบอส:บลาบลาบลาบลาบลา"]
-         currentEvent = 13
-     }
-     if (currentEvent == 13 && !dialogue_status) { fight_status = true }
-     if (positionX >= monster_posx[2] - 120 && positionX <= monster_posx[2] + 192 + 120 && positionY >= monster_posy[2] - 115 && positionY <= monster_posy[2] + 115 && bunchun_check && !dialogue_status && currentEvent == 13) {
+    if (currentEvent == 12 && !dialogue_status && checkpoint == 5 && axeon_check) {
+        dialogue_status = true
+        words = ["มินิบอส:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "มินิบอส:บลาบลาบลาบลาบลา"]
+        currentEvent = 13
+    }
+    if (currentEvent == 13 && !dialogue_status) { fight_status = true }
+    if (positionX >= monster_posx[2] - 120 && positionX <= monster_posx[2] + 192 + 120 && positionY >= monster_posy[2] - 115 && positionY <= monster_posy[2] + 115 && bunchun_check && !dialogue_status && currentEvent == 13) {
         ctx.drawImage(bunchunf, positionX + 144, positionY + 42)
         if (keyPresses.KeyF && currentEvent == 13) {
             itemsound.play()
@@ -1019,7 +1064,18 @@ function gameLoop() {
             document.getElementById("comic-container").style.animationName = "comic4"
             document.getElementById("comic-container").style.animationDuration = "4s"
         }
-     }
+    }
+
+    /* GAME EVENT Bg6 */
+    if (checkpoint == 6 && currentEvent == 14 && !dialogue_status) {
+        words = ["boss:บลาบลา", "sander:บลาๆ"];
+        dialogue_status = true;
+        currentEvent = 15
+        monster_action = 0;
+    }
+    if (currentEvent == 15 && !dialogue_status) {
+        fight_status = true;
+    }
 
     if (fight_status) {
         document.getElementById("information").style.display = "none"
@@ -1147,6 +1203,48 @@ function gameLoop() {
         }
     }
 
+    if (checkpoint == 5 && monster_bulletx == -100 && Math.abs((positionX + 81) - (monster_posx[2] + 96)) >= 500 && currentLoopIndex_monster == 3 && bunchun_phase == 1) {
+        monster_action = 4
+        monster_attack = true
+        monster_bulletx = monster_posx[2]
+    }
+    if (checkpoint == 5 && (Math.abs((positionX + 81) - (monster_posx[2] + 96)) < 500 && Math.abs((positionY + 81) - (monster_posy[2] + 96)) < 500) || (hp_monster <= 125)) {
+        bunchun_phase = 2;
+    }
+
+    if (checkpoint == 6 && fight_status && hp_monster > 0) {
+        // monster_speed = 4;
+        // if (monster_action == 4) {
+        //     monster_move = false;
+        // }
+        if (monster_move && fight_status && monster_posy[3] + 180 < positionY + 162) {
+            monster_posy[3] += monster_speed;
+            monster_action = 2;
+        }
+        if (monster_move && fight_status && monster_posy[3] + 180 > positionY + 162) {
+            monster_posy[3] -= monster_speed;
+            monster_action = 0;
+        }
+        if (monster_move && fight_status && monster_posx[3] + (360 / 2) < positionX + (162 / 2) && (positionY + 162 >= monster_posy[3] + 360 || positionY <= monster_posy[2] + 162) && !((monster_posx[3] + ((1 / 2) * 360) - 81 < positionX + (162 / 2)) && (monster_posx[3] + ((1 / 2) * 360) + 81 > positionX + (162 / 2)))) {
+            monster_posx[3] += monster_speed;
+            monster_action = 1;
+        }
+        if (monster_move && fight_status && monster_posx[3] + (360 / 2) > positionX + (162 / 2) && (positionY + 162 >= monster_posy[3] + 360 || positionY <= monster_posy[2] + 162) && !((monster_posx[3] + ((1 / 2) * 360) - 81 < positionX + (162 / 2)) && (monster_posx[3] + ((1 / 2) * 360) + 81 > positionX + (162 / 2)))) {
+            monster_posx[3] -= monster_speed;
+            monster_action = 3
+        }
+        // if (fight_status && Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 250 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 250) {
+        //     monster_move = true
+        // }
+        if (fight_status && Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 400 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 400) {
+            if (monster_move) {
+                currentLoopIndex_monster = 0
+                monster_move = false
+            }
+            monster_attack = true
+        }
+    }
+
     if (fight_status && monster_attack && hp_monster > 0 && hp_sander > 0) {
         if (checkpoint == 2) {
             if (positionX >= monster_posx[0]) { monster_action = 6 }
@@ -1187,9 +1285,9 @@ function gameLoop() {
                 if ((Math.abs(monster_bulletx - positionX) <= 250) || (monster_action == 5 && monster_bulletx >= -100)) {
                     ctx.drawImage(bunchun_action4, 1 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
                 }
-                if ((Math.abs(monster_bulletx - positionX) <= 150) && monster_bulletx > positionX && monster_bulletx < positionX+162) {
+                if ((Math.abs(monster_bulletx - positionX) <= 150) && monster_bulletx > positionX && monster_bulletx < positionX + 162) {
                     ctx.drawImage(bunchun_action4, 2 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
-                    if (positionY+162 >= 350+70 && positionY+162 <= 350+529-70 && hp_monster > 0 && hp_sander > 0) {
+                    if (positionY + 162 >= 350 + 70 && positionY + 162 <= 350 + 529 - 70 && hp_monster > 0 && hp_sander > 0) {
                         player_takedmg = true;
                     }
                 }
@@ -1197,6 +1295,59 @@ function gameLoop() {
                     ctx.drawImage(bunchun_action4, 0 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
                 }
                 if (monster_bulletx <= -100) { monster_bulletx = -100 }
+            }
+        }
+
+        if (checkpoint == 6) {
+            if ((positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3]) && (positionX <= monster_posx[3] + 720 && positionX >= monster_posx[3] - 360)) {
+                monster_action = 5
+            }
+            if ((positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3]) && (positionX > monster_posx[3] + 720 || positionX < monster_posx[3] - 360)) {
+                monster_action = 4
+            }
+            if ((positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3]) && (positionY > monster_posy[3] + 360 || positionY < monster_posy[3])) {
+                monster_action = 4
+            }
+            else {
+                if (!jumpcheck) {
+                    monster_action = 6
+                    cur_posX = positionX
+                    cur_posY = positionY
+                    jumcheck = true
+                }
+            }
+            if (monster_action == 4 && currentLoopIndex_monster >= 3) { //ยิง missile
+                if (monster_bullet_timer <= 0) {
+                    monster_bulletx = monster_posx[3] + 78;
+                    monster_bullety = monster_posy[3] + 78;
+                    if (positionX >= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3])) {
+                        monster_bullet_posxy.push([monster_bulletx - 156, monster_bullety - 78, "right", 0])
+                    }
+                    else if (positionX <= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3])) {
+                        monster_bullet_posxy.push([monster_bulletx, monster_bullety - 78, "left", 0])
+                    }
+                    else if (positionY >= monster_posy[3] && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
+                        monster_bullet_posxy.push([monster_bulletx + 78, monster_bullety - 162, "up", 0])
+                    }
+                    else if (positionY <= monster_posy[3] && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
+                        monster_bullet_posxy.push([monster_bulletx + 78, monster_bullety, "down", 0])
+                    }
+                    else {
+                        monster_move = true;
+                        monster_attack = false;
+                    }
+                    monster_bullet_timer = delay;
+                }
+                monster_bullet_timer -= 1;
+            }
+            if (monster_action == 6) { // กระโดดใส่
+                temp_x = cur_posX + 81 - monster_posx[3] - 160
+                temp_y = cur_posY + 81 - monster_posy[3] - 160
+                monster_posx[3] = temp_x / 25
+                monster_posy[3] = temp_y / 25
+                if (((cur_posX - monster_posx[3]) ** 2 + (cur_posY - monster_posy[3]) ** 2) ** (1 / 2) <= 50) {
+                    jumcheck = false
+                }
             }
         }
 
@@ -1245,7 +1396,7 @@ function gameLoop() {
         if (fight_status && hp_monster > 0 && hp_sander > 0 && monster_attack && currentLoopIndex_monster >= 3) {
             if ((Math.abs((positionX + 81) - (monster_posx[2] + 96)) <= 200 && Math.abs((positionY + 81) - (monster_posy[2] + 96)) <= 100 && monster_action == 5 && bunchun_phase == 2 && !bunchun_check)) {
                 player_takedmg = true;
-        }
+            }
         }
 
         if (player_takedmg) {
@@ -1424,6 +1575,62 @@ function drawWeapon(x, y) {
     }
     if (righthand == "gun") {
         ctx.drawImage(gun, x + 215, 870, 124, 155)
+    }
+}
+
+function drawBulletMonster() {
+    for (let i = 0; i < monster_bullet_posxy.length; i++) {
+        // if (fight_status) {
+        //     if (checkpoint == 4 && Math.abs((bullet_posxy[i][0] + 81) - (monster_posx[1] + 162)) <= 50 && Math.abs((bullet_posxy[i][1] + 81) - (monster_posy[1] + 162)) <= 100) {
+        //         monster_attack = true
+        //         monster_takedmg = true
+        //         bullet_damage = true
+        //     }
+        //     if (checkpoint == 5 && Math.abs((bullet_posxy[i][0] + 81) - (monster_posx[2] + 96)) <= 50 && Math.abs((bullet_posxy[i][1] + 81) - (monster_posy[2] + 96)) <= 100) {
+        //         monster_attack = true
+        //         monster_takedmg = true
+        //         bullet_damage = true
+        //     }
+        // }
+        if (monster_bullet_posxy[i][1] <= 0) {
+            monster_bullet_posxy.splice(i, 1);
+            i--;
+            continue;
+        }
+        if (monster_bullet_posxy[i][2] == "down") {
+            if (monster_bullet_posxy[i][1] > -162) {
+                monster_bullet_posxy[i][1] -= 18;
+            }
+            boss_bullet = boss_bulletu;
+        }
+        if (monster_bullet_posxy[i][2] == "up") {
+            if (monster_bullet_posxy[i][1] < canvas.height) {
+                monster_bullet_posxy[i][1] += 18;
+            }
+            boss_bullet = boss_bulletd;
+        }
+        if (monster_bullet_posxy[i][2] == "right") {
+            if (monster_bullet_posxy[i][0] < canvas.width) {
+                monster_bullet_posxy[i][0] += 18
+            }
+            boss_bullet = boss_bulletr;
+        }
+        if (monster_bullet_posxy[i][2] == "left") {
+            if (monster_bullet_posxy[i][0] > -162) {
+                monster_bullet_posxy[i][0] -= 18;
+            }
+            boss_bullet = boss_bulletl;
+        }
+        if (monster_bullet_posxy[i][3] > 3) {
+            monster_bullet_posxy[i][3] = 3;
+        }
+        if (monster_bullet_posxy[i][2] == "right" || monster_bullet_posxy[i][2] == "left") {
+            ctx.drawImage(boss_bullet, monster_bullet_posxy[i][0], monster_bullet_posxy[i][1], 160, 63);
+        }
+        else {
+            ctx.drawImage(boss_bullet, monster_bullet_posxy[i][0], monster_bullet_posxy[i][1], 63, 160);
+        }
+        monster_bullet_posxy[i][3] += 1;
     }
 }
 
