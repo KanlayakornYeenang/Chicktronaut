@@ -68,16 +68,16 @@ let bg5_obj1 = new Image();
 let bg6_obj1 = new Image();
 
 //เปลี่ยนตรงนี้เพื่อวาร์ป
-let run = false;
+let run = true;
 let comic = false;
 let positionX = 12;
 let positionY = 522;
-let bg = bg1;
-let currentBg = bg1;
-let currentBg_ = bg1_1;
-let bg_obj = bg1_obj1;
-let checkpoint = 1;
-let currentEvent = -1;
+let bg = bg6;
+let currentBg = bg6;
+let currentBg_ = bg6_1;
+let bg_obj = bg6_obj1;
+let checkpoint = 6;
+let currentEvent = 14;
 //
 
 let objposX = [];
@@ -143,6 +143,8 @@ let boss_bulletu = new Image();
 let boss_bulletd = new Image();
 let boss_bullet = boss_bulletd;
 let jumpcheck = false;
+let harpoonr = new Image();
+let harpoonl = new Image();
 
 let fight_status = false;
 let hp_sander = 100;
@@ -256,6 +258,8 @@ function loadImage() {
     boss_bulletl.src = 'image/boss_bulletl.png';
     boss_bulletu.src = 'image/boss_bulletu.png';
     boss_bulletd.src = 'image/boss_bulletd.png';
+    harpoonl.src = 'image/harpoonl.png'
+    harpoonr.src = 'image/harpoonr.png'
 }
 
 function leftsword() {
@@ -570,6 +574,9 @@ function gameLoop() {
     if (checkpoint == 6) {
         walkCollison(0,0,0,0)
     }
+
+    document.getElementById("homepage").style.display = "none"
+    document.getElementById("comic-container").style.display = "none"
 
     if ((keyPresses.KeyW || keyPresses.KeyS) && (keyPresses.KeyA || keyPresses.KeyD)) {
         movement_speed /= Math.sqrt(2);
@@ -1305,7 +1312,8 @@ function gameLoop() {
 
         if (checkpoint == 6) {
             if ((positionY <= monster_posy[3] + 240 && positionY >= monster_posy[3]) && (positionX <= monster_posx[3] + 720 && positionX >= monster_posx[3] - 360)) { //harpoon
-                monster_action = 5
+                if (positionX < monster_posx[3]) { monster_action = 5 }
+                else { monster_action = 7 }
             }
             else if ((positionY <= monster_posy[3] + 240 && positionY >= monster_posy[3]) && (positionX > monster_posx[3] + 720 || positionX < monster_posx[3] - 360)) { // missile
                 monster_action = 4
@@ -1345,6 +1353,8 @@ function gameLoop() {
                 }
                 monster_bullet_timer -= 1;
             }
+            if (monster_action == 5 && currentLoopIndex_monster >= 3) { ctx.drawImage(harpoonr, monster_posx[3]-295, monster_posy[3]+145, 360, 48) }
+            if (monster_action == 7 && currentLoopIndex_monster >= 3) { ctx.drawImage(harpoonl, monster_posx[3]+295, monster_posy[3]+145, 360, 48) }
             if (monster_action == 6) { // กระโดดใส่
                 temp_x = cur_posX + 81 - monster_posx[3] - 78
                 temp_y = cur_posY + 81 - monster_posy[3] - 78
