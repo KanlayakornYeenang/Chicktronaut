@@ -949,6 +949,9 @@ function gameLoop() {
         if (checkpoint == 6 && fight_status && (positionY + 162 < monster_posy[3] + 360 - 30)) {
             drawFrame(mcdo, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[3], monster_posy[3], 512, 512, 360, 360);
         }
+        if (checkpoint == 6 && !fight_status && mcdo_check) {
+            ctx.drawImage(mcdo, 3*512 , 8*512, 512, 512, monster_posx[3], monster_posy[3], 360, 360);
+        }
         if (checkpoint == 6) { ctx.drawImage(bg6_dark, 0, 0, canvas.width, canvas.height) }
     }
 
@@ -1440,6 +1443,7 @@ function gameLoop() {
                 if (checkpoint == 2) { monster_action = 4 }
                 if (checkpoint == 4) { monster_action = 7 }
                 if (checkpoint == 5) { monster_action = 7 }
+                if (checkpoint == 6) { monster_action = 8 }
             }
             monster_takedmg = false;
         }
@@ -1472,11 +1476,11 @@ function gameLoop() {
                 if (monster_action == 5) { hp_sander -= 1.5 }
             }
             if (checkpoint == 6) {
-                if (monster_action == 4) { hp_sander -= 1 }
+                if (monster_action == 4) { hp_sander -= 0.5 }
                 if (monster_action == 5 || monster_action == 7) {
-                    hp_sander -= 1.5
+                    hp_sander -= 0.25
                     if (hp_monster+1.5<=150) {
-                        hp_monster += 1.5;
+                        hp_monster += 0.25;
                     }
                 }
             }
@@ -1518,6 +1522,7 @@ function gameLoop() {
         if (checkpoint == 2 && !worm_check) { worm_check = true }
         if (checkpoint == 4 && !axeon_check) { axeon_check = true }
         if (checkpoint == 5 && !bunchun_check) { bunchun_check = true }
+        if (checkpoint == 6 && !mcdo_check) { mcdo_check = true }
     }
 
     if (fight_status && hp_sander <= 0) {
@@ -1719,6 +1724,11 @@ function drawBullet() {
                 bullet_damage = true
             }
             if (checkpoint == 5 && Math.abs((bullet_posxy[i][0] + 81) - (monster_posx[2] + 96)) <= 50 && Math.abs((bullet_posxy[i][1] + 81) - (monster_posy[2] + 96)) <= 100) {
+                monster_attack = true
+                monster_takedmg = true
+                bullet_damage = true
+            }
+            if (checkpoint == 6 && Math.abs((bullet_posxy[i][0] + 81) - (monster_posx[3] + 96)) <= 50 && Math.abs((bullet_posxy[i][1] + 81) - (monster_posy[3] + 96)) <= 80) {
                 monster_attack = true
                 monster_takedmg = true
                 bullet_damage = true
