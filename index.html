@@ -25,6 +25,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500&family=JetBrains+Mono:wght@500&display=swap"
     rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -51,10 +52,11 @@
         #myCanvas {
             position: absolute;
             height: 90vh;
-            border: 3px solid white;
+            border: 3px solid black;
         }
 
-        .modal {
+        .modal,
+        .setting {
             display: none;
             position: fixed;
             z-index: 1;
@@ -67,13 +69,20 @@
         }
 
         .modal-content {
-            background-image: linear-gradient(180deg, rgba(54, 37, 98, 0.5) 0%, rgba(3, 4, 24, 1) 100%);
-            background-blend-mode: lighten;
+            background-image: url('image/modalbg.gif');
             background-size: cover;
             background-position: center;
+        }
+
+        .setting-content {
+            background-image: linear-gradient(180deg, rgba(54, 37, 98, 0.5) 0%, rgba(3, 4, 24, 1) 100%);
+        }
+
+        .modal-content,
+        .setting-content {
             border-radius: 20px;
-            width: 49%;
-            height: 50%;
+            width: 60vh;
+            height: 60vh;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -95,7 +104,8 @@
             }
         }
 
-        .modal-inner {
+        .modal-inner,
+        .setting-inner {
             width: 100%;
             height: 100%;
             position: absolute;
@@ -105,7 +115,7 @@
         }
 
         .close {
-            color: #fff;
+            color: #000;
             float: right;
             padding-right: 2%;
             padding-top: 1%;
@@ -115,17 +125,17 @@
             font-size: 1.5vw;
         }
 
-        .close:hover,
-        .close:focus {
+        .close:hover
+        {
             color: #aaaaaa;
             text-decoration: none;
             cursor: pointer;
         }
 
         #modal-innertext {
-            font-size: 1.25vw;
+            font-size: 2vw;
             line-height: 2.25vw;
-            color: white;
+            color: black;
             text-align: center;
         }
 
@@ -138,7 +148,7 @@
             position: absolute;
             width: 160vh;
             height: 90vh;
-            border: 3px solid transparent;
+            border: 3px solid black;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -176,10 +186,12 @@
             background-color: white;
             opacity: .5;
             transition: .5s;
+            cursor: pointer;
         }
 
         .dropup-l,
         .dropup-r {
+            cursor: pointer;
             display: none;
             width: 13.5vh;
             height: 28vh;
@@ -234,7 +246,7 @@
         }
 
         .sword {
-            border-bottom: transparent;
+            border-bottom: black;
         }
 
         .imgsword,
@@ -324,7 +336,7 @@
         }
 
         #dead {
-            border: 3px solid transparent;
+            border: 3px solid black;
             width: 160vh;
             height: 90vh;
             position: absolute;
@@ -417,7 +429,7 @@
             position: absolute;
             width: 160vh;
             height: 90vh;
-            border: 3px solid white;
+            border: 3px solid black;
             background-image: url('https://cdn.discordapp.com/attachments/933591523189215235/972041271134797844/homepage_0.jpg');
             background-size: cover;
             overflow: hidden;
@@ -430,7 +442,7 @@
             position: absolute;
             width: 160vh;
             height: 90vh;
-            border: 3px solid transparent;
+            border: 3px solid black;
             background-image: url('https://cdn.discordapp.com/attachments/933591523189215235/971986516698071060/1_4.jpg');
             background-size: cover;
             animation-name: comic1;
@@ -558,6 +570,70 @@
             }
         }
 
+        @keyframes comic5 {
+            0% {
+                background-image: url('https://cdn.discordapp.com/attachments/933591523189215235/971987569707462676/0.jpg');
+                opacity: 0;
+            }
+
+            25% {
+                background-image: url('comic/5_1.jpg');
+                opacity: 1;
+            }
+
+            40% {
+                background-image: url('comic/5_2.jpg');
+            }
+
+            55% {
+                background-image: url('comic/5_3.jpg');
+            }
+
+            70% {
+                background-image: url('comic/5_4.jpg');
+            }
+
+            85% {
+                background-image: url('comic/5_5.jpg');
+            }
+
+            100% {
+                background-image: url('comic/5_6.jpg');
+            }
+        }
+
+        @keyframes comic6 {
+            0% {
+                background-image: url('https://cdn.discordapp.com/attachments/933591523189215235/971987569707462676/0.jpg');
+                opacity: 0;
+            }
+
+            25% {
+                background-image: url('comic/6_1.jpg');
+                opacity: 1;
+            }
+
+            40% {
+                background-image: url('comic/6_2.jpg');
+            }
+
+            55% {
+                background-image: url('comic/6_3.jpg');
+            }
+
+            70% {
+                background-image: url('comic/6_4.jpg');
+            }
+
+            86% {
+                background-image: url('comic/6_5.jpg');
+            }
+
+            100% {
+                background-image: url('comic/6_6.jpg');
+            }
+        }
+
         @keyframes press {
             from {
                 opacity: 0;
@@ -583,12 +659,15 @@
             0% {
                 opacity: 0;
             }
+
             30% {
                 opacity: 0;
             }
+
             35% {
                 opacity: 1;
             }
+
             100% {
                 opacity: 1;
             }
@@ -598,6 +677,10 @@
             to {
                 transform: translateY(2vh);
             }
+        }
+
+        #cog:hover {
+            cursor: pointer;
         }
     </style>
 </head>
@@ -613,6 +696,8 @@
             <button id="retry" onclick="retry()">RETRY ?</button>
         </div>
         <div id="inner">
+            <img id="cog" src="image/cog.png" style="width:3.5vh; position:absolute; bottom:72.5vh; left:18.75vh;"
+                onclick="setting()">
             <div class="weapon-box">
                 <div class="weapon">
                     <div onclick="up()" class="weapon-l"></div>
@@ -639,17 +724,17 @@
                     </div>
                 </div>
             </div>
-                <div id="information">
-                    <a href="https://landingasgard.netlify.app/">
-                        <img id="sander"
+            <div id="information">
+                <a href="https://landingasgard.netlify.app/" target="_blank">
+                    <img id="sander"
                         src="https://cdn.discordapp.com/attachments/933591523189215235/967802503288741920/sander.png">
-                    </a>
-                    <img id="inf1"
-                        src="https://cdn.discordapp.com/attachments/933591523189215235/967804898957754408/information1.png">
-                    <img id="inf2"
-                        src="https://cdn.discordapp.com/attachments/933591523189215235/967805094781419580/information2.png">
-                    <h1 id="inf">เรียนรู้เพิ่มเติมเกี่ยวกับ<br>ประชาธิปไตยในอวกาศ</h1>
-                </div>
+                </a>
+                <img id="inf1"
+                    src="https://cdn.discordapp.com/attachments/933591523189215235/967804898957754408/information1.png">
+                <img id="inf2"
+                    src="https://cdn.discordapp.com/attachments/933591523189215235/967805094781419580/information2.png">
+                <h1 id="inf">เรียนรู้เพิ่มเติมเกี่ยวกับ<br>ประชาธิปไตยในอวกาศ</h1>
+            </div>
         </div>
         <div id="homepage">
             <img style="position:absolute; animation: dukdik 1.5s infinite linear alternate; transform: translateY(-vh);"
@@ -657,7 +742,7 @@
             <img style="position:absolute;"
                 src="https://cdn.discordapp.com/attachments/933591523189215235/972041288838955049/homepage_2.png">
             <img style="position:absolute; animation: kapribta 2.5s infinite alternate;"
-                    src="https://cdn.discordapp.com/attachments/933591523189215235/972114004413669406/homepage_3.png">
+                src="https://cdn.discordapp.com/attachments/933591523189215235/972114004413669406/homepage_3.png">
             <div id="press">
                 <img style="width:8vh; height:8vh; transform:translateY(2vh);"
                     src="https://cdn.discordapp.com/attachments/933591523189215235/972140868729462804/spacebar.png">
@@ -670,7 +755,8 @@
             </div>
         </div>
         <div id="comic-container">
-            <div id="press" style="animation-delay:2s; background-color: rgb(0, 0, 0, 0.5); transform: translate(62.5vh, 2.5vh) scale(0.6);">
+            <div id="press"
+                style="animation-delay:2s; background-color: rgb(0, 0, 0, 0.5); transform: translate(62.5vh, 2.5vh) scale(0.6);">
                 <img style="width:8vh; height:8vh; transform:translateY(2vh);"
                     src="https://cdn.discordapp.com/attachments/933591523189215235/972140868729462804/spacebar.png">
                 <p style="font-family: 'JetBrains Mono', monospace; font-size:3.5vh; text-align:center; color:white">
@@ -686,11 +772,35 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <div class="modal-inner">
-                <p id="modal-innertext"><img
-                        src="https://cdn.discordapp.com/attachments/933591523189215235/967429576131223602/tutorial1.png">
-                    ใส่อาวุธที่ได้รับโดยการ คลิกที่ช่องอาวุธมือซ้าย หรือ ช่องอาวุธมือขวา<br><br>
-                    หากคุณกำลังถืออาวุธแค่มือเดียว<br>
-                    สามารถกดโจมตีได้โดย ปุ่มสเปซ หรือ คลิกซ้าย</p>
+                <p id="modal-innertext">
+                    <img src="image/sword.png" style="width:30vh">
+                    <br><br>
+                    คุณได้รับ ดาบเลเซอร์
+            </div>
+        </div>
+    </div>
+    <div id="mySetting" class="setting">
+        <div class="setting-content">
+            <div class="setting-inner" style="gap:7vh">
+                <div>
+                    <h1
+                        style="color:222035; font-size:6vh; text-align:center; letter-spacing:0.5vh; background:white; margin:auto; width:40vh; border-radius:20px;">
+                        Settings</h1>
+                </div>
+                <div style="margin: 0px auto">
+                    <div style="display:flex;">
+                        <i style="color:white; font-size:10vh;" class="material-icons">&#xe050;</i>
+                        <h1 style="color:white; font-size:4.5vh; letter-spacing:0.25vh;">Sound</h1>
+                        <input type="range" min="0.1" max="1" value="0.5" step="0.1" class="slider" id="sound"
+                            style="margin-left:2.5vh;" onchange="setVolume()">
+                    </div>
+                    <div style="display:flex;">
+                        <i style="color:white; font-size:10vh;" class="material-icons">&#xe405;</i>
+                        <h1 style="color:white; font-size:4.5vh; letter-spacing:0.25vh">Music</h1>
+                        <input type="range" min="0.1" max="1" value="0.5" step="0.1" class="slider" id="music"
+                            style="margin-left:2.5vh;" onchange="setVolume()">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

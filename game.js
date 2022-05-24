@@ -28,13 +28,11 @@ let sander_sword = new Image();
 let sander_pf_st = new Image();
 let sander_damage = new Image();
 let sander_sword_damage = new Image();
+let sander_weapon_damage = new Image();
 
 let sander_dia = new Image();
 let extra0_dia = new Image();
 let extra1_dia = new Image();
-let axeon_dia = new Image();
-let bunchun_dia = new Image();
-let mcdo_dia = new Image();
 
 let bullet_posxy = [];
 let bullet_posx = 0;
@@ -90,8 +88,8 @@ let objstatus = false;
 
 let alpha = 0, delta = 0.025;
 let fade_status = false;
-let sword_status = false;
-let gun_status = false;
+let sword_status = true;
+let gun_status = true;
 
 let dialogue_status = false;
 let words = ["sander:โอ้ย...ที่นี่มันที่ไหนเนี่ย ปวดหัวชะมัด", "sander:แปลกมาก ทำไมถึง...จำอะไรไม่ได้เลยล่ะ?"];
@@ -103,11 +101,13 @@ let texty = 925
 let allowNextdialogue = false;
 let nextdialogue = false;
 
-let box = new Image();
+let box1 = new Image();
+let box2 = new Image();
 let extra0 = new Image();
 let extra1 = new Image();
 let extra2 = new Image();
 let extra3 = new Image();
+let extra4 = new Image();
 let extrax = [1260, 1614]
 let extray = [390, 132]
 let currentLoopIndex_extra = 0;
@@ -121,10 +121,12 @@ let swordf = new Image();
 let gun = new Image();
 let wormf = new Image();
 let bunchunf = new Image();
-let lefthand = undefined;
-let lefthand_current = undefined;
-let righthand = undefined;
-let righthand_current = undefined;
+let wichianf = new Image();
+let hadaof = new Image();
+let lefthand = "gun";
+let lefthand_current = "gun";
+let righthand = "sword";
+let righthand_current = "sword";
 let playerhit = false;
 let sword_inhand = new Image();
 let gunL = new Image();
@@ -139,16 +141,15 @@ let bunchun_damage = new Image();
 let bunchun_action4 = new Image();
 let bunchun_zeri = new Image();
 let mcdo = new Image();
+let mcdo_damage = new Image();
 let boss_bulletr = new Image();
 let boss_bulletl = new Image();
-let boss_bulletu = new Image();
-let boss_bulletd = new Image();
-let boss_bullet = boss_bulletd;
+let boss_bullet = boss_bulletr;
 let jumpcheck = false;
+let cur_posX = 0
+let cur_posY = 0
 let harpoonr = new Image();
 let harpoonl = new Image();
-let cur_posX = 0;
-let cur_posY = 0;
 
 let fight_status = false;
 let hp_sander = 100;
@@ -164,7 +165,7 @@ let monster_posy = [80, 402, 522, 426];
 let monster_bulletx = -100;
 let monster_bullety = 0;
 let monster_bullet_posxy = []
-let monster_bullet_timer = 0;
+let monster_bullet_timer = 200;
 let frameCount_monster = 0;
 let monster_move = true;
 let monster_attack = false;
@@ -179,36 +180,14 @@ let posatmx = 0;
 let posatmy = 0;
 let player_takedmg = false;
 let monster_takedmg = false;
+let bossbullet_damage = false;
 let bullet_damage = false;
+let bulletout = false
+let tracktime = 0
 
-let itemsound = new Audio('sound/Item sound.mp3') 
 let typesound = new Audio('sound/Type sound.mp3')
-let stonestepsound = new Audio('sound/stonestep.mp3')
-let sandstepsound = new Audio('sound/sandstep.mp3')
-let sandstep2sound = new Audio('sound/sandstep2.mp3')
-let sandstep3sound = new Audio('sound/sandstep3.mp3')
-let steelstepsound = new Audio('sound/steelstep.mp3')
-let chickenwalksound = new Audio('sound/chickenwalk.mp3')
 let sandsound = new Audio('sound/Sands of Mystery.mp3')
-let gunsound = new Audio('sound/lazer.mp3')
-let chargersound = new Audio('sound/charger.mp3')
-let mon4hitsound = new Audio('sound/mon4hit.mp3')
-let mon4diedsound = new Audio('sound/mon4died.mp3') 
-let sabersound = new Audio('sound/lightsaber.mp3')
-let electric1sound = new Audio('sound/electric1.mp3')
-let electric2sound = new Audio('sound/electric2.mp3')
-let electric3sound = new Audio('sound/electric3.mp3')
-let finalfightsound = new Audio('sound/finalfight.mp3')
-let finalfight2sound = new Audio('sound/finalfight2.mp3')
-let minibossendsound = new Audio('sound/minibossend.mp3')
-let deadsound = new Audio('sound/dead.mp3')
-let dead2sound = new Audio('sound/dead2.mp3')
-let wormhitsound = new Audio('sound/wormhit.mp3')
-let wormwalksound = new Audio('sound/wormwalk.mp3')
-let hitsound = new Audio('sound/hit.mp3')
-let spearsound = new Audio('sound/spear.mp3')
-let finalbosswalksound = new Audio('sound/finalbosswalk.mp3')
-let endingsound = new Audio('sound/ending.mp3')
+let itemsound = new Audio('sound/Item sound.mp3')
 
 window.addEventListener('keydown', (event) => { keyPresses[event.code] = true; });
 window.addEventListener('keyup', (event) => { keyPresses[event.code] = false; });
@@ -221,24 +200,24 @@ function loadImage() {
     sander_sword.src = 'https://cdn.discordapp.com/attachments/933591523189215235/967714982135480330/sander_sword.png'
     sander_damage.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968359288064053259/sander_damage.png'
     sander_sword_damage.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968359287715954708/sander_sword_damage.png'
+    sander_weapon_damage.src = 'image/sander_weapon_damage.png'
     sander.onload = () => { window.requestAnimationFrame(gameLoop); };
     sander_pf_st.src = 'https://media.discordapp.net/attachments/933591523189215235/965153062740176916/sander_pf_st.png';
 
     sander_dia.src = 'image/sander_dialogue.png';
     extra0_dia.src = 'image/extra0_dialogue.png';
     extra1_dia.src = 'image/extra1_dialogue.png';
-    axeon_dia.src = 'image/axeon_dia.png'
-    bunchun_dia.src = 'image/bunchun_dia.png'
-    mcdo_dia.src = 'image/mcdo_dia.png'
 
     sword_inhand.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972396351449096232/sword_inhand.png'
     gunL.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972396333640085544/gun_inhand_l.png'
 
-    box.src = 'image/box.png'
+    box1.src = 'image/box1.png'
+    box2.src = 'image/box2.png'
     extra0.src = 'https://cdn.discordapp.com/attachments/933591523189215235/977482859487068200/extra0.png'
     extra1.src = 'https://cdn.discordapp.com/attachments/933591523189215235/977455913755615252/extra1.png'
     extra2.src = 'image/extra2.png'
     extra3.src = 'image/extra3.png'
+    extra4.src = 'image/hadao-sneek.png'
 
     bullet_w.src = 'https://cdn.discordapp.com/attachments/812749326543487058/966710007934636062/bullet_w.png'
     bullet_a.src = 'https://cdn.discordapp.com/attachments/812749326543487058/966710008307916820/bullet_a.png'
@@ -274,6 +253,8 @@ function loadImage() {
     gun.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972185631478407258/gunbg.png'
     wormf.src = 'https://cdn.discordapp.com/attachments/933591523189215235/972357220593455114/wormf.png'
     bunchunf.src = 'image/bunchunf.png'
+    wichianf.src = 'image/wichianf.png'
+    hadaof.src = 'image/hadaof.png'
 
     worm.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968199488185446420/worm.png'
     worm_damage.src = 'https://cdn.discordapp.com/attachments/933591523189215235/968361910737207306/worm_damage.png'
@@ -285,10 +266,9 @@ function loadImage() {
     bunchun_action4.src = 'https://cdn.discordapp.com/attachments/933591523189215235/971421292895043634/miniboss_action4.png'
     bunchun_zeri.src = 'https://cdn.discordapp.com/attachments/933591523189215235/977636140200898610/miniboss_zeri.png'
     mcdo.src = 'image/mcdo.png'
+    mcdo_damage.src = 'image/mcdo_damage.png'
     boss_bulletr.src = 'image/boss_bulletr.png';
     boss_bulletl.src = 'image/boss_bulletl.png';
-    boss_bulletu.src = 'image/boss_bulletu.png';
-    boss_bulletd.src = 'image/boss_bulletd.png';
     harpoonl.src = 'image/harpoonl.png'
     harpoonr.src = 'image/harpoonr.png'
 }
@@ -355,20 +335,19 @@ function rightgun() {
 
 function retry() {
     hp_sander = hp_max;
+    hp_monster = 150;
     fight_status = false;
     fade_status = true;
     currentDirection = FACING_RIGHT
     if (checkpoint == 2) {
         monster_posx[0] = 1556
         monster_posy[0] = 80
-        hp_monster = 150
         positionX = 12;
         positionY = 450;
     }
     if (checkpoint == 4) {
         monster_posx[1] = 1150
         monster_posy[1] = 402
-        hp_monster = 150
         positionX = 12;
         positionY = 402;
     }
@@ -379,7 +358,6 @@ function retry() {
         monster_bulletx = -100;
         monster_posx[2] = 1596
         monster_posy[2] = 522
-        hp_monster = 150
         positionX = 12
         positionY = 522
     }
@@ -388,7 +366,6 @@ function retry() {
         positionY = 522
         monster_posx[3] = 1500
         monster_posy[3] = 426
-        hp_monster = 150
     }
 }
 
@@ -566,6 +543,7 @@ function gameLoop() {
             currentBg_ = bg4_1;
             bg_obj = bg4_obj1;
             checkpoint = 4
+            currentEvent = 10
             fade_status = true;
         }
     }
@@ -576,6 +554,7 @@ function gameLoop() {
         walkCollison(435, 105, 945, 120)
         walkCollison(1404, 150, 450, 81)
         walkCollison(1404, 228, 450, 120)
+
         walkCollison(1383, 864, 450, 90)
         walkCollison(1383, 930, 450, 90)
         walkCollison(1383, 1002, 450, 90)
@@ -605,7 +584,6 @@ function gameLoop() {
     }
 
     if (checkpoint == 5) {
-        sandsound.pause();
         walkCollison(30, 255, 180, 120)
         walkCollison(1707, 255, 180, 120)
         walkCollison(240, 165, 1440, 90)
@@ -618,12 +596,6 @@ function gameLoop() {
         walkCollison(1290, 1002, 180, 60)
         walkCollison(1503, 1002, 180, 60)
         walkCollison(1716, 1002, 180, 60)
-        if (hp_monster > 0){
-            finalfight2sound.play();
-        }
-        if (hp_monster <= 0 || hp_sander <= 0){
-            finalfight2sound.pause();
-        }
     }
 
     if (checkpoint == 6) {
@@ -633,6 +605,9 @@ function gameLoop() {
         walkCollison(1290, 249, 615, 100)
         walkCollison(1290, 285, 615, 100)
     }
+
+    // document.getElementById("homepage").style.display = "none"
+    // document.getElementById("comic-container").style.display = "none"
 
     if ((keyPresses.KeyW || keyPresses.KeyS) && (keyPresses.KeyA || keyPresses.KeyD)) {
         movement_speed /= Math.sqrt(2);
@@ -657,7 +632,6 @@ function gameLoop() {
         || (mouseclick && righthand == "sword" && lefthand == "gun" || (keyPresses.Space && righthand == "gun" && lefthand == "sword")))
         && !dialogue_status && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
         playerhit = true;
-        sabersound.play();
     }
     if (hp_sander > 0 && ((keyPresses.Space || mouseclick) && ((lefthand == "gun" && righthand == undefined) || (righthand == "gun" && lefthand == undefined))
         || (mouseclick && righthand == "gun" && lefthand == "sword" || (keyPresses.Space && righthand == "sword" && lefthand == "gun")))
@@ -677,28 +651,9 @@ function gameLoop() {
     else {
         sander_current = sander
     }
-    if (hasMoved == true){
-        if (checkpoint == 1 || checkpoint == 2 || checkpoint == 3){
-            sandstepsound.play();
-        }
-        if (checkpoint == 4 || checkpoint == 5 || checkpoint == 6){
-            stonestepsound.play();
-        }
-    }
-    if (hasMoved == false){
-        if (checkpoint == 1 || checkpoint == 2 || checkpoint == 3){
-            sandstepsound.pause();
-        }
-        if (checkpoint == 4 || checkpoint == 5 || checkpoint == 6){
-            stonestepsound.pause();
-        }
-    }
     if ((keyPresses.Space || mouseclick) && energy > 0 && playershoot && !dialogue_status && gun_status
         && document.getElementById("homepage").style.display == "none" && document.getElementById("comic-container").style.display == "none") {
-        if (energy != 0) {
-            energy -= 1;
-            gunsound.play();
-            }
+        if (energy != 0) { energy -= 1; }
         if (bullet_timer <= 0) {
             bullet_posx = positionX + 78;
             bullet_posy = positionY + 78;
@@ -711,14 +666,11 @@ function gameLoop() {
         bullet_timer -= 1;
     }
     else {
-        gunsound.pause();
         if (energy < 145) {
             energy += 0.5;
         }
     }
-    if (!fight_status && hp_sander+0.5<=100) {
-        hp_sander += 0.5;
-    }
+    if (!fight_status && hp_sander+0.5<=100 && hp_sander>0) {hp_sander += 0.5}
 
     if (!run) {
         document.getElementById("homepage").style.display = "flex"
@@ -742,7 +694,9 @@ function gameLoop() {
         bg_obj = bg6_obj1;
         checkpoint = 6
     }
-    if (!keyPresses.Space && !mouseclick && (currentEvent == 0 || currentEvent == 9 || currentEvent == 11 || currentEvent == 14) && comic) {
+    if (comic && (keyPresses.Space || mouseclick) && currentEvent == 15) { currentEvent = 16 }
+    if (comic && (keyPresses.Space || mouseclick) && currentEvent == 17) { currentEvent = 18 }
+    if (!keyPresses.Space && !mouseclick && (currentEvent == 0 || currentEvent == 9 || currentEvent == 11 || currentEvent == 14 || currentEvent == 16 || currentEvent == 18) && comic) {
         document.getElementById("homepage").style.display = "none"
         document.getElementById("comic-container").style.animationName = "comic"
         document.getElementById("comic-container").style.animationDuration = "2.5s"
@@ -751,9 +705,6 @@ function gameLoop() {
             comic = false
         }, 2500)
         if (currentEvent == 0) { dialogue_status = true }
-    }
-    if (!comic && run) {
-        document.getElementById("comic-container").style.display = "none"
     }
 
     movement_speed = 6;
@@ -770,10 +721,10 @@ function gameLoop() {
         }
     }
 
-    console.log(comic)
+    // console.log(currentEvent, dialogue_status)
     if (hasMoved || playerhit || dead_status) {
-        //console.log("positionX: ", positionX);
-        //console.log("positionY: ", positionY);
+        console.log("positionX: ", positionX);
+        console.log("positionY: ", positionY);
         frameCount++;
         if (frameCount >= FRAME_LIMIT) {
             frameCount = 0;
@@ -843,6 +794,7 @@ function gameLoop() {
         }
         if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 >= monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
         if (checkpoint == 3 && positionY + 162 < canvas.height - 270) { ctx.drawImage(extra3, 0, canvas.height - 270, 1920, 270) }
+        if (checkpoint == 3 && positionY + 162 >= 179 + 162 + 30) { ctx.drawImage(extra4, 804, 179) }
         if (checkpoint == 4 && !axeon_check && !fight_status && (positionY + 162 >= monster_posy[1] + 300)) {
             ctx.drawImage(axeon, 0 * 512, 3 * 512, 512, 512, monster_posx[1], monster_posy[1], 324, 324)
         }
@@ -866,7 +818,6 @@ function gameLoop() {
         if (checkpoint == 5 && fight_status && (positionY + 162 >= monster_posy[2] + 174 + 30)) {
             if (monster_action == 5 && currentLoopIndex_monster >= 3) {
                 ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
-                electric1sound.play();
             }
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
         }
@@ -877,6 +828,7 @@ function gameLoop() {
         if (checkpoint == 1 && currentEvent >= 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186 && dialogue_status) {
             ctx.drawImage(extra0, 512, 0, 512, 512, extrax[0], extray[0], 186, 186)
         }
+        if (checkpoint == 3 && positionY + 162 < 179 + 162 + 30) { ctx.drawImage(extra4, 804, 179) }
         if (currentEvent == 5 && !dialogue_status && !inventory.includes("sword") && positionY + 162 < 162 + 120) { ctx.drawImage(sword, 1140, 162, 96, 120) }
         if (checkpoint == 1 && currentEvent < 2 && extrax[0] != -162 && positionY + 162 < extray[0] + 186) { ctx.drawImage(extra0, 0, 0, 512, 512, extrax[0], extray[0], 186, 186) }
         if (currentEvent < 4) {
@@ -895,7 +847,10 @@ function gameLoop() {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
         if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
-        if (checkpoint == 3 && positionY + 162 >= canvas.height - 270) { ctx.drawImage(extra3, 0, canvas.height - 270, 1920, 270) }
+        if (checkpoint == 3 && positionY + 162 >= canvas.height - 270) {
+            ctx.drawImage(extra3, 0, canvas.height - 270, 1920, 270)
+
+        }
         if (checkpoint == 4 && !axeon_check && !fight_status && (positionY + 162 < monster_posy[1] + 300)) {
             ctx.drawImage(axeon, 0 * 512, 3 * 512, 512, 512, monster_posx[1], monster_posy[1], 324, 324)
         }
@@ -907,15 +862,18 @@ function gameLoop() {
         }
         drawObj();
         if (checkpoint == 3) {
+            if (currentEvent == 10 || currentEvent == 11.2) { drawFrame(box1, CYCLE_LOOP[currentLoopIndex_extra], 0, 262, 380, 68, 68, 68, 68) }
+            if (currentEvent == 10 || currentEvent == 11.1) { drawFrame(box2, CYCLE_LOOP[currentLoopIndex_extra], 0, 740, 160, 68, 68, 68, 68) }
+            drawExtra()
             ctx.drawImage(extra2, 152, 408, 113, 174)
         }
+        if (checkpoint == 3 && positionY + 162 < 179 + 162 + 30) { ctx.drawImage(extra4, 804, 179) }
         if (checkpoint == 5 && !fight_status && bunchun_check && positionY + 162 < monster_posy[2] + 174 + 30) {
             ctx.drawImage(bunchun, 3 * 512, 7 * 512, 512, 512, monster_posx[2], monster_posy[2], 192, 192)
         }
         if (checkpoint == 5 && fight_status && (positionY + 162 < monster_posy[2] + 174 + 30)) {
             if (monster_action == 5 && currentLoopIndex_monster >= 3) {
                 ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
-                electric1sound.play();
             }
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
         }
@@ -972,6 +930,7 @@ function gameLoop() {
             ctx.drawImage(extra2, 152, 408, 113, 174)
         }
         if (checkpoint == 3 && positionY + 162 < canvas.height - 270) { ctx.drawImage(extra3, 0, canvas.height - 270, 1920, 270) }
+        if (checkpoint == 3 && positionY + 162 >= 179 + 162 + 30) { ctx.drawImage(extra4, 804, 179) }
         if (checkpoint == 5 && !fight_status && !bunchun_check) {
             ctx.drawImage(bunchun, 0, 2 * 512, 512, 512, monster_posx[2], monster_posy[2], 192, 192)
             monster_action = 4
@@ -982,11 +941,10 @@ function gameLoop() {
         if (checkpoint == 5 && fight_status && (positionY + 162 >= monster_posy[2] + 174 + 30)) {
             if (monster_action == 5 && currentLoopIndex_monster >= 3) {
                 ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
-                electric1sound.play();
             }
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
         }
-        if (checkpoint == 6 && !fight_status && !mcdo_check) {
+        if (checkpoint == 6 && !fight_status && !mcdo_check && (positionY + 162 >= monster_posy[3] + 360 - 30)) {
             ctx.drawImage(mcdo, 0, 2 * 512, 512, 512, monster_posx[3], monster_posy[3], 360, 360)
         }
         if (checkpoint == 6 && fight_status && (positionY + 162 >= monster_posy[3] + 360 - 30)) {
@@ -1014,32 +972,31 @@ function gameLoop() {
             drawFrame(worm, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25);
         }
         if (checkpoint == 2 && worm_check && !inventory.includes("gun") && !fight_status && (positionY + 162 < monster_posy[0] + (226.25 * (3 / 4)))) { ctx.drawImage(worm, 3 * 512, 4 * 452.5, 512, 452.5, monster_posx[0], monster_posy[0], 324, 226.25) }
-        if (checkpoint == 3 && positionY + 162 < 408 + 174) {
-            ctx.drawImage(extra2, 152, 408, 113, 174)
-        }
+        if (checkpoint == 3 && positionY + 162 < 408 + 174) { ctx.drawImage(extra2, 152, 408, 113, 174) }
         if (checkpoint == 3) {
-            drawFrame(box, CYCLE_LOOP[currentLoopIndex_extra], 0, 262, 380, 68, 68, 68, 68)
+            if (currentEvent == 10 || currentEvent == 11.2) { drawFrame(box1, CYCLE_LOOP[currentLoopIndex_extra], 0, 262, 380, 68, 68, 68, 68) }
+            if (currentEvent == 10 || currentEvent == 11.1) { drawFrame(box2, CYCLE_LOOP[currentLoopIndex_extra], 0, 740, 160, 68, 68, 68, 68) }
             drawExtra()
         }
+        if (checkpoint == 3 && positionY + 162 < 179 + 162 + 30) { ctx.drawImage(extra4, 804, 179) }
         if (checkpoint == 3 && positionY + 162 >= canvas.height - 270) { ctx.drawImage(extra3, 0, canvas.height - 270, 1920, 270) }
-        // if (checkpoint == 3 && positionX >= 128 && positionX <= 230 && positionY >= 320 && positionY <= 540) {
-        //     drawFrame(box, CYCLE_LOOP[currentLoopIndex_extra], 0, 255, 415, 68, 68, 68, 68)
-        // }
         if (checkpoint == 5 && !fight_status && bunchun_check && positionY + 162 < monster_posy[2] + 174 + 30) {
             ctx.drawImage(bunchun, 3 * 512, 7 * 512, 512, 512, monster_posx[2], monster_posy[2], 192, 192)
         }
         if (checkpoint == 5 && fight_status && (positionY + 162 < monster_posy[2] + 174 + 30)) {
             if (monster_action == 5 && currentLoopIndex_monster >= 3) {
                 ctx.drawImage(bunchun_zeri, monster_posx[2] - 100, monster_posy[2], 395, 192)
-                electric1sound.play();
             }
             drawFrame(bunchun, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192);
+        }
+        if (checkpoint == 6 && !fight_status && !mcdo_check && (positionY + 162 < monster_posy[3] + 360 - 30)) {
+            ctx.drawImage(mcdo, 0, 2 * 512, 512, 512, monster_posx[3], monster_posy[3], 360, 360)
         }
         if (checkpoint == 6 && fight_status && (positionY + 162 < monster_posy[3] + 360 - 30)) {
             drawFrame(mcdo, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[3], monster_posy[3], 512, 512, 360, 360);
         }
         if (checkpoint == 6 && !fight_status && mcdo_check) {
-            ctx.drawImage(mcdo, 3*512 , 8*512, 512, 512, monster_posx[3], monster_posy[3], 360, 360);
+            ctx.drawImage(mcdo, 3 * 512, 8 * 512, 512, 512, monster_posx[3], monster_posy[3], 360, 360);
         }
         if (checkpoint == 6) { ctx.drawImage(bg6_dark, 0, 0, canvas.width, canvas.height) }
     }
@@ -1050,7 +1007,7 @@ function gameLoop() {
     if (!dialogue_status) {
         drawProfile(50, 265);
         document.getElementById("inner").style.opacity = "1";
-        drawWeapon(50, 860);
+        drawWeapon(50, 860)
     }
     if (dialogue_status) {
         document.getElementById("inner").style.opacity = "0";
@@ -1146,11 +1103,41 @@ function gameLoop() {
     }
     if (currentEvent == 9 && document.getElementById("comic-container").style.display == "none") {
         document.getElementById("myModal").style.display = "flex"
-        document.getElementById("modal-innertext").innerHTML = "<img src='https://cdn.discordapp.com/attachments/933591523189215235/972384853343481886/tutorial2.png'>การใช้ปืนจะทำให้ Energy ของคุณลดลงอย่างมาก<br><br>หากคุณกำลังถืออาวุธสองมือ ดาเมจของอาวุธจะโดนลดลง<br>กดปุ่มสเปซเพื่อโจมตีด้วยอาวุธมือซ้าย คลิกซ้ายเพื่อโจมตีด้วยอาวุธมือขวา";
+        document.getElementById("modal-innertext").innerHTML = "<img src='image/gun_inhand_r.png' style='width:30vh'><br><br>คุณได้รับ ปืนเลเซอร์";
         currentEvent = 10
     }
 
     /* GAME EVENT Bg3 */
+    if (checkpoint == 3 && positionX >= 90 && positionX <= 230 && positionY >= 320 && positionY <= 540) {
+        if (currentEvent == 10 || currentEvent == 11.2) { ctx.drawImage(wichianf, positionX + 144, positionY + 42) }
+        if (currentEvent == 10 && !dialogue_status && keyPresses.KeyF) {
+            dialogue_status = true
+            words = ["wichian:นายนี่ฝีมือไม่ธรรมดาเลยนะ", "sander:???", "wichian:ฮาดาวเล่าให้ฉันฟังหมดแล้ว", "wichian:ฉันนึกว่านายจะใช้ทางลับเหมือนกับไก่ตัวอื่นๆ ซะอีก",
+            "wichian:แต่นายกลับต่อสู้กับหนอนที่ขโมยเสบียงและปืน<br>ของพวกเราไปอย่างกล้าหาญ", "sander:(ฉันสู้เพราะหาทางลับอะไรนั่นไม่เจอต่างหาก...)"]
+            currentEvent = 11.1
+        }
+        if (currentEvent == 11.2 && !dialogue_status && keyPresses.KeyF) {
+            dialogue_status = true
+            words = ["wichian:นายนี่ฝีมือไม่ธรรมดาเลยนะ", "sander:???", "wichian:ฮาดาวเล่าให้ฉันฟังหมดแล้ว", "wichian:ฉันนึกว่านายจะใช้ทางลับเหมือนกับไก่ตัวอื่นๆ ซะอีก",
+            "wichian:แต่นายกลับต่อสู้กับหนอนที่ขโมยเสบียงและปืน<br>ของพวกเราไปอย่างกล้าหาญ", "sander:(ฉันสู้เพราะหาทางลับอะไรนั่นไม่เจอต่างหาก...)"]
+            currentEvent = 12.2
+        }
+    }
+    if (checkpoint == 3 && positionX >= 650 && positionX <= 750 && positionY >= 90 && positionY <= 250) {
+        if (currentEvent == 10 || currentEvent == 11.1) { ctx.drawImage(hadaof, positionX + 144, positionY + 42) }
+        if (currentEvent == 11.1 && !dialogue_status && keyPresses.KeyF) {
+            dialogue_status = true
+            words = ["wichian:นายนี่ฝีมือไม่ธรรมดาเลยนะ", "sander:???", "wichian:ฮาดาวเล่าให้ฉันฟังหมดแล้ว", "wichian:ฉันนึกว่านายจะใช้ทางลับเหมือนกับไก่ตัวอื่นๆ ซะอีก",
+            "wichian:แต่นายกลับต่อสู้กับหนอนที่ขโมยเสบียงและปืน<br>ของพวกเราไปอย่างกล้าหาญ", "sander:(ฉันสู้เพราะหาทางลับอะไรนั่นไม่เจอต่างหาก...)"]
+            currentEvent = 12.1
+        }
+        if (currentEvent == 10 && !dialogue_status && keyPresses.KeyF) {
+            dialogue_status = true
+            words = ["wichian:นายนี่ฝีมือไม่ธรรมดาเลยนะ", "sander:???", "wichian:ฮาดาวเล่าให้ฉันฟังหมดแล้ว", "wichian:ฉันนึกว่านายจะใช้ทางลับเหมือนกับไก่ตัวอื่นๆ ซะอีก",
+            "wichian:แต่นายกลับต่อสู้กับหนอนที่ขโมยเสบียงและปืน<br>ของพวกเราไปอย่างกล้าหาญ", "sander:(ฉันสู้เพราะหาทางลับอะไรนั่นไม่เจอต่างหาก...)"]
+            currentEvent = 11.2
+        }
+    }
 
     /* GAME EVENT Bg4 */
     if (checkpoint == 4 && currentEvent == 10) {
@@ -1164,7 +1151,7 @@ function gameLoop() {
         ctx.drawImage(axeonf, positionX + 144, positionY + 42)
         if (keyPresses.KeyF && currentEvent == 11) {
             dialogue_status = true
-            words = ["axeon:หยุดก่อน! ที่นี่ไม่อนุญาตให้ใครเข้าไปทั้งนั้น!", "sander:อะไรกัน แกไม่เห็นไก่พวกนี้ที่ยืนประท้วงอยู่ตรงนี้เหรอ", "axeon:ฉันเห็น แล้วมันเกี่ยวอะไรกับฉันล่ะ? หน้าที่ของฉันคือการเฝ้าฐานนี้เท่านั้นแหละ", "sander:ถ้าฉันจะเข้าฐานนั้นไป ก็ต้องข้ามแกไปก่อนสินะ...!"]
+            words = ["แอ็กซีออน:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "แอ็กซีออน:บลาบลาบลาบลาบลา"]
             currentEvent = 12
         }
     }
@@ -1175,7 +1162,7 @@ function gameLoop() {
     /* GAME EVENT Bg5 */
     if (currentEvent == 12 && !dialogue_status && checkpoint == 5 && axeon_check) {
         dialogue_status = true
-        words = ["bunchun:ตายยากจริงๆ เลยนะ แซนเดอร์", "sander:อะไรกัน แกเป็นใคร ทำไมถึงรู้ชื่อฉัน!", "bunchun:เอาชนะฉันและไปพบกับบอสของแกให้ได้สิ เพื่อที่จะได้รู้ความจริงไงล่ะ!"]
+        words = ["มินิบอส:บลาบลาบลาบลาบลา", "sander:บลาบลาบลาบลาบลา", "มินิบอส:บลาบลาบลาบลาบลา"]
         currentEvent = 13
     }
     if (currentEvent == 13 && !dialogue_status) { fight_status = true }
@@ -1193,15 +1180,31 @@ function gameLoop() {
 
     /* GAME EVENT Bg6 */
     if (checkpoint == 6 && currentEvent == 14 && !dialogue_status && !comic) {
-        words = ["mcdo:ในที่สุด แกก็กลับมานะเมี้ยว...", "sander:พูดเรื่องอะไรของแก", "mcdo:อย่าบอกนะว่าแกยังจำไม่ได้อีกน่ะ", "mcdo:แกน่ะเคยเป็นเพื่อนคนสนิทและเป็น<br>บุคคลสำคัญของที่นี่มาก่อนเลยนะ",
-        "mcdo:แต่แกดันคิดจะทรยศฉัน จะหุบยานอวกาศ<br>และข้อมูลทุกอย่างไว้เองคนเดียว!", "mcdo:ดีนะที่ฉันจับแผนบ้าๆ ของแกได้ก่อน", "mcdo:ฉันเลยจัดการลบความทรงจำแก<br>และเอาแกไปทิ้งไว้ในทะเลทรายยังไงล่ะ",
-        "sander:ไม่ต้องบอกก็รู้ ว่าแกคือคนที่อยู่เบื้องหลัง<br>เรื่องราวทั้งหมดนี่!"];
+        words = ["boss:บลาบลา", "sander:บลาๆ"];
         dialogue_status = true;
         currentEvent = 15
         monster_action = 0;
     }
-    if (currentEvent == 15 && !dialogue_status) {
+    if (checkpoint == 6 && currentEvent == 15 && !dialogue_status) {
         fight_status = true;
+    }
+    if (checkpoint == 6 && currentEvent == 15 && (hp_monster <= 75 || hp_sander <= 75) && !mouseclick && !keyPresses.Space) {
+        comic = true
+        fight_status = false;
+        document.getElementById("comic-container").style.display = "flex"
+        document.getElementById("comic-container").style.backgroundImage = "url('comic/5_6.jpg')"
+        document.getElementById("comic-container").style.animationName = "comic5"
+        document.getElementById("comic-container").style.animationDuration = "10s"
+    }
+    if (currentEvent == 16 && !comic && hp_sander > 0 && hp_monster > 0) {
+        fight_status = true
+    }
+    if (checkpoint == 6 && currentEvent == 17 && mcdo_check && !fight_status) {
+        comic = true
+        document.getElementById("comic-container").style.display = "flex"
+        document.getElementById("comic-container").style.backgroundImage = "url('comic/6_6.jpg')"
+        document.getElementById("comic-container").style.animationName = "comic6"
+        document.getElementById("comic-container").style.animationDuration = "8s"
     }
 
     if (fight_status) {
@@ -1211,38 +1214,22 @@ function gameLoop() {
         document.getElementById("information").style.display = "flex"
     }
 
-    if (checkpoint == 2) {
+    if (checkpoint == 2 && fight_status && hp_monster > 0 && hp_sander > 0) {
         if (monster_move && fight_status && monster_posy[0] < positionY) {
             monster_posy[0] += monster_speed;
             monster_action = 2;
-            wormwalksound.play();
-                if (hp_sander <= 0){
-                    wormwalksound.pause();
-                }
         }
         if (monster_move && fight_status && monster_posy[0] > positionY) {
             monster_posy[0] -= monster_speed;
             monster_action = 0;
-            wormwalksound.play();
-                if (hp_sander <= 0){
-                    wormwalksound.pause();
-                }
         }
         if (monster_move && fight_status && monster_posx[0] < positionX && positionY + 81 >= monster_posy[0] && positionY + 81 <= monster_posy[0] + 324) {
             monster_posx[0] += monster_speed / 2;
             monster_action = 1;
-            wormwalksound.play();
-                if (hp_sander <= 0){
-                    wormwalksound.pause();
-                }
         }
         if (monster_move && fight_status && monster_posx[0] > positionX && positionY + 81 >= monster_posy[0] && positionY + 81 <= monster_posy[0] + 324) {
             monster_posx[0] -= monster_speed / 2;
             monster_action = 3
-            wormwalksound.play();
-                if (hp_sander <= 0){
-                    wormwalksound.pause();
-                }
         }
         if (fight_status && Math.abs(((positionX + (162 / 2))) - (monster_posx[0] + (324 / 2))) <= ((162 / 2) + (324 / 2)) - 60 && Math.abs((positionY + (162 / 2)) - (monster_posy[0] + (226.25 / 2))) <= 100) {
             if (monster_move) {
@@ -1253,44 +1240,25 @@ function gameLoop() {
         }
     }
 
-    if (checkpoint == 4 && fight_status && hp_monster > 0) {
-        if (hp_sander <= 0){
-            chickenwalksound.pause();
-        }
+    if (checkpoint == 4 && fight_status && hp_monster > 0 && hp_sander > 0) {
         monster_speed = 4
         if (monster_move && fight_status && monster_posy[1] + 305 < positionY + 162) {
             monster_posy[1] += monster_speed;
             monster_action = 2;
-            chickenwalksound.play();
-            if (hp_sander <= 0){
-                chickenwalksound.pause();
-            }
         }
         if (monster_move && fight_status && monster_posy[1] + 305 > positionY + 162) {
             monster_posy[1] -= monster_speed;
             monster_action = 0;
-            chickenwalksound.play();
-            if (hp_sander <= 0){
-                chickenwalksound.pause();
-            }
         }
         if (monster_move && fight_status && monster_posx[1] + (324 / 2) < positionX + (162 / 2) && (positionY + 162 >= monster_posy[1] + 305 || positionY <= monster_posy[1] + 162) && !((monster_posx[1] + ((1 / 2) * 324) - 81 < positionX + (162 / 2)) && (monster_posx[1] + ((1 / 2) * 324) + 81 > positionX + (162 / 2)))) {
             if (monster_action == 2 || monster_action == 0) { monster_speed /= Math.sqrt(2) }
             monster_posx[1] += monster_speed;
             monster_action = 1;
-            chickenwalksound.play();
-            if (hp_sander <= 0){
-                chickenwalksound.pause();
-            }
         }
         if (monster_move && fight_status && monster_posx[1] + (324 / 2) > positionX + (162 / 2) && (positionY + 162 >= monster_posy[1] + 305 || positionY <= monster_posy[1] + 162) && !((monster_posx[1] + ((1 / 2) * 324) - 81 < positionX + (162 / 2)) && (monster_posx[1] + ((1 / 2) * 324) + 81 > positionX + (162 / 2)))) {
             if (monster_action == 2 || monster_action == 0) { monster_speed /= Math.sqrt(2) }
             monster_posx[1] -= monster_speed;
             monster_action = 3
-            chickenwalksound.play();
-            if (hp_sander <= 0){
-                chickenwalksound.pause();
-            }
         }
         if (fight_status && temp_x == 0 && temp_y == 0 && (((((positionX + 81) - (monster_posx[1] + 162)) ** 2) + ((positionY + 81) - (monster_posy[1] + 162)) ** 2)) ** 0.5 >= 450) {
             temp_x = positionX + 81 - monster_posx[1] - 162
@@ -1328,43 +1296,24 @@ function gameLoop() {
         }
     }
 
-    if (checkpoint == 5 && fight_status && hp_monster > 0) {
+    if (checkpoint == 5 && fight_status && hp_monster > 0 && hp_sander > 0) {
         if (bunchun_phase > 1) {
-            if (hp_sander <= 0){
-                steelstepsound.pause();
-            }
             monster_speed = 4;
             if (monster_move && fight_status && monster_posy[2] + 174 < positionY + 162) {
                 monster_posy[2] += monster_speed;
                 monster_action = 2;
-                steelstepsound.play();
-                if (hp_sander <= 0){
-                    steelstepsound.pause();
-                }
             }
             if (monster_move && fight_status && monster_posy[2] + 174 > positionY + 162) {
                 monster_posy[2] -= monster_speed;
                 monster_action = 0;
-                steelstepsound.play();
-                if (hp_sander <= 0){
-                    steelstepsound.pause();
-                }
             }
             if (monster_move && fight_status && monster_posx[2] + (192 / 2) < positionX + (162 / 2) && (positionY + 162 >= monster_posy[2] + 174 || positionY <= monster_posy[2] + 162) && !((monster_posx[2] + ((1 / 2) * 192) - 81 < positionX + (162 / 2)) && (monster_posx[2] + ((1 / 2) * 192) + 81 > positionX + (162 / 2)))) {
                 monster_posx[2] += monster_speed;
                 monster_action = 1;
-                steelstepsound.play();
-                if (hp_sander <= 0){
-                    steelstepsound.pause();
-                }
             }
             if (monster_move && fight_status && monster_posx[2] + (192 / 2) > positionX + (162 / 2) && (positionY + 162 >= monster_posy[2] + 174 || positionY <= monster_posy[2] + 162) && !((monster_posx[2] + ((1 / 2) * 192) - 81 < positionX + (162 / 2)) && (monster_posx[2] + ((1 / 2) * 192) + 81 > positionX + (162 / 2)))) {
                 monster_posx[2] -= monster_speed;
                 monster_action = 3
-                steelstepsound.play();
-                if (hp_sander <= 0){
-                    steelstepsound.pause();
-                }
             }
             if (bunchun_phase == 2 && fight_status && Math.abs((positionX + 81) - (monster_posx[2] + 96)) <= 90 && Math.abs((positionY + 81) - (monster_posy[2] + 96)) <= 100) {
                 if (monster_move) {
@@ -1390,94 +1339,56 @@ function gameLoop() {
         monster_bulletx = monster_posx[2]
     }
 
-    if (checkpoint == 6 && fight_status && hp_monster > 0) {
-        if (hp_sander <= 0){
-            finalbosswalksound.pause();
-        }
-         monster_speed = 2;
-        if (monster_action == 4) {
-             monster_move = false;
-             finalbosswalksound.play();
-                if (hp_sander <= 0){
-                    finalbosswalksound.pause();;
-                }
-         }
+    if (checkpoint == 6 && fight_status && hp_monster > 0 && hp_sander > 0) {
+        monster_speed = 2;
+        monster_attack = true
         if (monster_move && fight_status && monster_posy[3] + 180 < positionY + 162) {
-            monster_posy[3] += monster_speed;
+            monster_posy[3] += monster_speed + 1;
             monster_action = 2;
-            finalbosswalksound.play();
-                if (hp_sander <= 0){
-                    finalbosswalksound.pause();;
-                }
         }
         if (monster_move && fight_status && monster_posy[3] + 180 > positionY + 162) {
-            monster_posy[3] -= monster_speed;
+            monster_posy[3] -= monster_speed + 1;
             monster_action = 0;
-            finalbosswalksound.play();
-                if (hp_sander <= 0){
-                    finalbosswalksound.pause();;
-                }
         }
         if (monster_move && fight_status && monster_posx[3] + (360 / 2) < positionX + (162 / 2) && (positionY + 162 >= monster_posy[3] + 360 || positionY <= monster_posy[2] + 162) && !((monster_posx[3] + ((1 / 2) * 360) - 81 < positionX + (162 / 2)) && (monster_posx[3] + ((1 / 2) * 360) + 81 > positionX + (162 / 2)))) {
             monster_posx[3] += monster_speed;
             monster_action = 1;
-            finalbosswalksound.play();
-                if (hp_sander <= 0){
-                    finalbosswalksound.pause();;
-                }
         }
         if (monster_move && fight_status && monster_posx[3] + (360 / 2) > positionX + (162 / 2) && (positionY + 162 >= monster_posy[3] + 360 || positionY <= monster_posy[2] + 162) && !((monster_posx[3] + ((1 / 2) * 360) - 81 < positionX + (162 / 2)) && (monster_posx[3] + ((1 / 2) * 360) + 81 > positionX + (162 / 2)))) {
             monster_posx[3] -= monster_speed;
             monster_action = 3
-            finalbosswalksound.play();
-                if (hp_sander <= 0){
-                    finalbosswalksound.pause();;
-                }
         }
-        // if (fight_status && Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 250 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 250) {
-        //     monster_move = true
-        // }
-        if (fight_status && Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 400 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 400) {
+        if (fight_status && Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 450 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 100) {
             if (monster_move) {
                 currentLoopIndex_monster = 0
                 monster_move = false
             }
             monster_attack = true
         }
+        
+        // if (fight_status && Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 250 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 250) {
+        //     monster_move = true
+        // }
     }
 
     if (fight_status && monster_attack && hp_monster > 0 && hp_sander > 0) {
         if (checkpoint == 2) {
-            if (positionX >= monster_posx[0]) {
-                 monster_action = 6
-                 wormhitsound.play();
-            }
-            else {
-                 monster_action = 5
-                 wormhitsound.play();
-            }
+            if (positionX >= monster_posx[0]) { monster_action = 6 }
+            else { monster_action = 5 }
         }
 
         if (checkpoint == 4) {
             if (fight_status && (monster_action != 5 && monster_action != 6) && Math.abs((positionX + 81) - (monster_posx[1] + 162)) <= 100 && Math.abs((positionY + 40) - (monster_posy[1] + 162)) <= 100) {
                 if (monster_posy[1] + 162 > positionY + 81) {
                     monster_action = 8;
-                    mon4hitsound.play();
                 }
                 else {
                     monster_action = 4;
-                    mon4hitsound.play();
                 }
             }
             else if ((((((posatmx) - (monster_posx[1] + 162)) ** 2) + ((posatmy) - (monster_posy[1] + 162)) ** 2)) ** 0.5 >= 50 && (monster_action != 4 && monster_action != 8)) {
-                if (monster_posx[1] > positionX && monster_action != 6) {
-                     monster_action = 5
-                     chargersound.play()
-                }
-                else if (monster_posx[1] < positionX && monster_action != 5) {
-                     monster_action = 6
-                     chargersound.play()
-                }
+                if (monster_posx[1] > positionX && monster_action != 6) { monster_action = 5 }
+                else if (monster_posx[1] < positionX && monster_action != 5) { monster_action = 6 }
                 monster_posx[1] += temp_x / 25
                 monster_posy[1] += temp_y / 25
             }
@@ -1499,73 +1410,92 @@ function gameLoop() {
                 if (monster_action == 4 || (monster_action != 4 && monster_bulletx >= -100)) { monster_bulletx -= 12 }
                 if ((Math.abs(monster_bulletx - positionX) <= 250) || (monster_action == 5 && monster_bulletx >= -100)) {
                     ctx.drawImage(bunchun_action4, 1 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
-                    electric2sound.play();
                 }
                 if ((Math.abs(monster_bulletx - positionX) <= 150) && monster_bulletx > positionX && monster_bulletx < positionX + 162) {
                     ctx.drawImage(bunchun_action4, 2 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
-                    if (positionY + 162 >= 350 + 70 && positionY + 162 <= 350 + 529 - 70 && hp_monster > 0 && hp_sander > 0 && !bunchun_check) {
+                    if (positionY + 162 >= 350 + 70 && positionY + 162 <= 350 + 529 - 70 && hp_monster > 0 && hp_sander > 0) {
                         player_takedmg = true;
-                        electric2sound.play();
                     }
                 }
                 else {
                     ctx.drawImage(bunchun_action4, 0 * 170, 0, 170, 900, monster_bulletx, 350, 100, 529)
-                    electric3sound.play();
                 }
                 if (monster_bulletx <= -100) { monster_bulletx = -100 }
             }
         }
 
         if (checkpoint == 6) {
-            if ((positionY <= monster_posy[3] + 240 && positionY >= monster_posy[3]-50) && (positionX <= monster_posx[3] + 640 && positionX >= monster_posx[3] - 360)) { //harpoon
-                if (positionX+81 < monster_posx[3]+180) { monster_action = 5 }
-                else { monster_action = 7 }
+            //console.log(monster_bullet_timer, monster_move, jumpcheck, Math.abs((positionX + 81) - (monster_posx[3] + 180)), currentLoopIndex_monster)
+            if ((positionY + 81 <= monster_posy[3] + 180 + 43 && positionY + 81 > monster_posy[3] + 180 - 90) && (positionX + 81 <= monster_posx[3] + 180 + 120 + 360 && positionX + 81 > monster_posx[3] + 180 + -120 - 360 && !jumpcheck)) { //harpoon
+                if (currentLoopIndex_monster == 0) {
+                    if (positionX +81 < monster_posx[3] +180 ) { 
+                        monster_action = 5 
+                    }
+                    else { 
+                        monster_action = 7 
+                    }
+                }
             }
-            else if ((positionY <= monster_posy[3] + 240 && positionY >= monster_posy[3]-30) && (positionX > monster_posx[3] + 640 || positionX < monster_posx[3] - 360)) { // missile
-                monster_action = 4
+            
+
+            else if ((positionY + 81 <= monster_posy[3] +78 + 63 && positionY + 81 >= monster_posy[3] +78 -63) && (positionX + 81 > monster_posx[3]  + 180 + 120 + 360 + 5 || positionX + 81 < monster_posx[3] + 180 + -120 - 360 -5 ) && !jumpcheck) { // missile
+                monster_bullet_timer -= 1;
             }
-            else if ((positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3]) && (positionY > monster_posy[3] + 240 || positionY < monster_posy[3]-30)) { // missile
-                monster_action = 4
+            else if ((positionX + 81 <= monster_posx[3] +180 + 110 && positionX + 81 >= monster_posx[3] +180 - -110) && (positionY + 81 > monster_posy[3] +180 + 160 || positionY + 81 < monster_posy[3] + 180 - 160)) { // missile
+                monster_bullet_timer -= 1;
             }
             else {
-                monster_action = 6 // jump
-                if (!jumpcheck) {
-                    cur_posX = positionX
-                    cur_posY = positionY
-                    jumpcheck = true
-                }
+                monster_move = true
+            //    if (!jumpcheck && Math.abs(positionX + 81 - monster_posx[3] - 180 >= 400) && Math.abs(positionY + 81 - monster_posy[3] - 180 >= 300)) {
+            //         currentLoopIndex_monster = 0
+            //         monster_action = 6
+            //         cur_monX = monster_posx[3]
+            //         cur_monY = monster_posy[3]
+            //         cur_posX = positionX
+            //         cur_posY = positionY
+            //         jumpcheck = true
+            //    }
             }
-            if (monster_action == 4 && currentLoopIndex_monster >= 3) { //ยิง missile
-                if (monster_bullet_timer <= 0) {
+
+            if (monster_bullet_timer <= 0) { //ยิง missile
+                if (currentLoopIndex_monster <= 3){
+                    monster_action = 4
+                    monster_move = false
+                    if(!bulletout){
+                        currentLoopIndex_monster = 0
+                        bulletout = true
+                    }
+                    
+                }
+                if (currentLoopIndex_monster == 3 && bulletout){
                     monster_bulletx = monster_posx[3] + 78;
                     monster_bullety = monster_posy[3] + 78;
-                    if (positionX >= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3]-30)) {
+                    if (positionX >= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3])) {
                         monster_bullet_posxy.push([monster_bulletx - 156, monster_bullety - 78, "right", 0])
+                        tracktime = 120
                     }
-                    else if (positionX <= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3]-30)) {
+                    else if (positionX <= monster_posx[3] && (positionY <= monster_posy[3] + 360 && positionY >= monster_posy[3])) {
                         monster_bullet_posxy.push([monster_bulletx, monster_bullety - 78, "left", 0])
+                        tracktime = 120
                     }
-                    else if (positionY >= monster_posy[3]-30 && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
+                    else if (positionY >= monster_posy[3] && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
                         monster_bullet_posxy.push([monster_bulletx + 78, monster_bullety - 162, "up", 0])
                     }
-                    else if (positionY <= monster_posy[3]-30 && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
+                    else if (positionY <= monster_posy[3] && (positionX <= monster_posx[3] + 360 && positionX >= monster_posx[3])) {
                         monster_bullet_posxy.push([monster_bulletx + 78, monster_bullety, "down", 0])
                     }
-                    else {
-                        monster_move = true;
-                        monster_attack = false;
-                    }
-                    monster_bullet_timer = delay;
+                    monster_bullet_timer = 100
+                    bulletout = false
+                    monster_move = true
                 }
-                monster_bullet_timer -= 1;
-                monster_action = 6
             }
+
+
             if (monster_action == 5 && currentLoopIndex_monster >= 3) {
-                ctx.drawImage(harpoonr, monster_posx[3]-295, monster_posy[3]+145, 360, 48)
-                if (Math.abs((positionX+81)-(monster_posx[3]-295+180)) <= 420 && Math.abs((positionY+81)-(monster_posy[3]+145+24) <= 55)) {
+                ctx.drawImage(harpoonr, monster_posx[3] - 295, monster_posy[3] + 145, 360, 48)
+                if (Math.abs((positionX + 81) - (monster_posx[3] - 295 + 180)) <= 420 && Math.abs((positionY + 81) - (monster_posy[3] + 145 + 24) <= 55)) {
                     monster_attack = true;
                     player_takedmg = true;
-                    spearsound.play();
                 }
             }
             if (monster_action == 7 && currentLoopIndex_monster >= 3) {
@@ -1573,23 +1503,38 @@ function gameLoop() {
                 if (Math.abs((positionX+81)-(monster_posx[3]+360-295+180)) <= 420 && Math.abs((positionY+81)-(monster_posy[3]+145+24) <= 55)) {
                     monster_attack = true;
                     player_takedmg = true;
-                    spearsound.play();
                 }
             }
-            if (monster_action == 6) { // กระโดดใส่
-                temp_x = cur_posX + 81 - monster_posx[3] - 78
-                temp_y = cur_posY + 81 - monster_posy[3] - 78
-                monster_posx[3] += temp_x / 60
-                monster_posy[3] += temp_y / 60
-                if (((cur_posX - monster_posx[3]) ** 2 + (cur_posY - monster_posy[3]) ** 2) ** (1 / 2) <= 50) {
-                    jumpcheck = false
-                    cur_posX = 0
-                    cur_posY = 0
-                    temp_x = 0
-                    temp_y = 0
-                }
-                
-            }
+            // if (monster_action == 6) { // กระโดดใส่
+            //     temp_x = cur_posX - monster_posx[3]
+            //     temp_y = cur_posY - monster_posy[3]
+            //     // if (cur_posX > monster_posx[3]){//ขวา
+            //     //     monster_posx[3] += 4
+            //     //     if (cur_posX <= monster_posx[3]){
+            //     //         jumpcheck = false
+            //     //         monster_move = true
+            //     //     }
+            //     // }
+            //     // else{
+            //     //     monster_posx[3] -= 4
+            //     //     if (cur_posX > monster_posx[3]){
+            //     //         jumpcheck = false
+            //     //         monster_move = true
+            //     //     }
+                    
+            //     // }
+            //     // monster_posy[3] = (temp_y/temp_x)*(monster_posx[3] - cur_monX) + cur_monY
+            //     monster_posx[3] += temp_x / 60
+            //     monster_posy[3] += temp_y / 60
+            //     if (((cur_posX - monster_posx[3]) ** 2 + (cur_posY - monster_posy[3]) ** 2) ** (1 / 2) <= 50) {
+            //         jumpcheck = false
+            //         cur_posX = 0
+            //         cur_posY = 0
+            //         temp_x = 0
+            //         temp_y = 0
+            //     }
+
+            // }
         }
 
         /* ตีเข้ามอน */
@@ -1597,63 +1542,53 @@ function gameLoop() {
             if ((Math.abs(((positionX + (162 / 2))) - (monster_posx[0] + (324 / 2))) <= ((162 / 2) + (324 / 2)) - 60 && Math.abs((positionY + (162 / 2)) - (monster_posy[0] + (226.25 / 2))) <= 100 && (checkpoint != 6)) ||
                 (Math.abs((positionX + 81) - (monster_posx[1] + 162)) <= 100 && Math.abs((positionY + 40) - (monster_posy[1] + 162)) <= 100 && (checkpoint != 6)) ||
                 (Math.abs((positionX + 81) - (monster_posx[2] + 96)) <= 350 && Math.abs((positionY + 81) - (monster_posy[2] + 96)) <= 100 && (checkpoint != 6)) ||
-                (Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 200 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 200 && positionY+162 <= monster_posy[3]+162+60 )) {
+                (Math.abs((positionX + 81) - (monster_posx[3] + 180)) <= 150 && Math.abs((positionY + 81) - (monster_posy[3] + 180)) <= 150)) {
                 if (((monster_posy[0] < positionY && currentDirection == FACING_UP) || (monster_posy[1] < positionY && currentDirection == FACING_UP)) ||
                     ((monster_posy[0] > positionY && currentDirection == FACING_DOWN) || (monster_posy[1] > positionY && currentDirection == FACING_DOWN)) ||
                     ((monster_posx[0] < positionX && currentDirection == FACING_LEFT) || (monster_posx[1] < positionX && currentDirection == FACING_LEFT)) ||
                     ((monster_posx[0] > positionX && currentDirection == FACING_RIGHT) || (monster_posx[1] > positionX && currentDirection == FACING_RIGHT)) ||
                     (monster_posy[2] < positionY && currentDirection == FACING_UP) || (monster_posy[2] > positionY && currentDirection == FACING_DOWN) ||
                     (monster_posx[2] < positionX && currentDirection == FACING_LEFT) || monster_posx[2] > positionX && currentDirection == FACING_RIGHT) {
-                        monster_takedmg = true
-                } 
-                if(checkpoint == 6){  
+                    monster_takedmg = true
+                }
+                if (checkpoint == 6) {
                     monster_takedmg = true
                 }
             }
         }
 
         if (monster_takedmg) {
-            hitsound.play();
             if (bullet_damage) {
-                hp_monster -= 0.75;
+                hp_monster -= 0.5;
                 bullet_damage = false;
             }
             else {
-                hp_monster -= 1;
+                if (checkpoint == 2) { hp_monster -= 1 }
+                else { hp_monster -= 0.5 }
             }
             if (checkpoint == 2) { drawFrame(worm_damage, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[0], monster_posy[0], 512, 452.5, 324, 226.25) }
             if (checkpoint == 4) { drawFrame(axeon_damage, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[1], monster_posy[1], 512, 512, 324, 324) }
             if (checkpoint == 5) { drawFrame(bunchun_damage, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[2], monster_posy[2], 512, 512, 192, 192) }
+            if (checkpoint == 6) { drawFrame(mcdo_damage, CYCLE_LOOP_MONSTER[currentLoopIndex_monster], monster_action, monster_posx[3], monster_posy[3], 512, 512, 360, 360) }
             if (hp_monster <= 0) {
                 currentLoopIndex_monster = 0;
-                if (checkpoint == 2) {
-                     monster_action = 4 
-                }
-                if (checkpoint == 4) {
-                     monster_action = 7
-                     mon4diedsound.play();
-                }
-                if (checkpoint == 5) {
-                     monster_action = 7
-                     minibossendsound.play(); 
-                }
-                if (checkpoint == 6) {
-                     monster_action = 8
-                     endingsound.play();
-                }
+                if (checkpoint == 2) { monster_action = 4 }
+                if (checkpoint == 4) { monster_action = 7 }
+                if (checkpoint == 5) { monster_action = 7 }
+                if (checkpoint == 6) { monster_action = 8 }
             }
             monster_takedmg = false;
         }
 
         if (fight_status && hp_monster > 0 && hp_sander > 0 && monster_attack && currentLoopIndex_monster >= 2 && currentLoopIndex_monster <= 3) {
-            if (((Math.abs(((positionX + (162 / 2))) - (monster_posx[0] + (324 / 2))) <= ((162 / 2) + (324 / 2)) - 60 && Math.abs((positionY + (162 / 2)) - (monster_posy[0] + (226.25 / 2))) <= 100 && !worm_check)) ||
-                (Math.abs((positionX + 81) - (monster_posx[1] + 162)) <= 100 && Math.abs((positionY + 40) - (monster_posy[1] + 162)) <= 100 && (monster_action == 4 || monster_action == 8) && !axeon_check) ||
-                (Math.abs((positionX + 81) - (monster_posx[1] + 162)) <= 80 && Math.abs((positionY + 40) - (monster_posy[1] + 162)) <= 60 && (monster_action == 5 || monster_action == 6) && !axeon_check)) {
+            if (((Math.abs(((positionX + (162 / 2))) - (monster_posx[0] + (324 / 2))) <= ((162 / 2) + (324 / 2)) - 60 && Math.abs((positionY + (162 / 2)) - (monster_posy[0] + (226.25 / 2))) <= 100 && !worm_check && checkpoint == 2)) ||
+                (Math.abs((positionX + 81) - (monster_posx[1] + 162)) <= 100 && Math.abs((positionY + 40) - (monster_posy[1] + 162)) <= 100 && (monster_action == 4 || monster_action == 8) && !axeon_check && checkpoint == 4) ||
+                (Math.abs((positionX + 81) - (monster_posx[1] + 162)) <= 80 && Math.abs((positionY + 40) - (monster_posy[1] + 162)) <= 60 && (monster_action == 5 || monster_action == 6) && !axeon_check && checkpoint == 4)) {
                 player_takedmg = true;
             }
         }
         else {
-            if (checkpoint != 5) { player_takedmg = false }
+            if (checkpoint != 5 && checkpoint != 6) { player_takedmg = false }
         }
 
         if (fight_status && hp_monster > 0 && hp_sander > 0 && monster_attack && currentLoopIndex_monster >= 3) {
@@ -1663,41 +1598,37 @@ function gameLoop() {
         }
 
         if (player_takedmg) {
-            hitsound.play();
             if (checkpoint == 2) { hp_sander -= 0.5 }
             if (checkpoint == 4) {
                 if (monster_action == 4 || monster_action == 8) { hp_sander -= 0.5 }
                 else { hp_sander -= 1 }
             }
             if (checkpoint == 5) {
-                if (monster_action == 4) { hp_sander -= 2 }
-                if (monster_action == 5) { hp_sander -= 1.5 }
+                if (monster_action == 4) { hp_sander -= 2.5 }
+                if (monster_action == 5) { hp_sander -= 2 }
             }
-            if (checkpoint == 6) {
-                if (monster_action == 4) { hp_sander -= 0.5 }
-                if (monster_action == 5 || monster_action == 7) {
-                    hp_sander -= 0.25
-                    if (hp_monster+1.5<=150) {
-                        hp_monster += 0.25;
-                    }
-                }
+            if (checkpoint == 6 && !bossbullet_damage) {
+                hp_sander -= 0.5
+                if (hp_monster+0.5 <= 150) { hp_monster += 0.5 } 
+            }
+            if (checkpoint == 6 && bossbullet_damage) {
+                hp_sander -= 1
             }
             if (sander_current == sander) {
-                drawFrame(sander_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162)
+                drawFrame(sander_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
             }
             if (sander_current == sander_sword) {
-                drawFrame(sander_sword_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162)
+                drawFrame(sander_sword_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
+            }
+            if (sander_current == sander_weapon) {
+                drawFrame(sander_weapon_damage, CYCLE_LOOP[currentLoopIndex], currentDirection, positionX, positionY, 512, 512, 162, 162);
             }
             if (hp_sander <= 0) {
-                deadsound.play();
-                dead2sound.play();
                 dead_status = true;
                 currentLoopIndex = 0;
                 currentDirection = 4;
             }
-            if (checkpoint == 5) {
-                player_takedmg = false;
-            }
+            if (checkpoint == 5 || (checkpoint == 6 && !bossbullet_damage)) { player_takedmg = false }
         }
 
         if (currentLoopIndex_monster > 3) {
@@ -1722,7 +1653,10 @@ function gameLoop() {
         if (checkpoint == 2 && !worm_check) { worm_check = true }
         if (checkpoint == 4 && !axeon_check) { axeon_check = true }
         if (checkpoint == 5 && !bunchun_check) { bunchun_check = true }
-        if (checkpoint == 6 && !mcdo_check) { mcdo_check = true }
+        if (checkpoint == 6 && !mcdo_check) {
+            mcdo_check = true
+            currentEvent = 17
+        }
     }
 
     if (fight_status && hp_sander <= 0) {
@@ -1735,9 +1669,8 @@ function gameLoop() {
         document.getElementById("myModal").style.display = "none";
     }
     window.onclick = function (event) {
-        if (event.target == document.getElementById("myModal")) {
-            document.getElementById("myModal").style.display = "none";
-        }
+        if (event.target == document.getElementById("myModal")) { document.getElementById("myModal").style.display = "none" }
+        if (event.target == document.getElementById("mySetting")) { document.getElementById("mySetting").style.display = "none"; }
     }
 
     if (hp_sander <= 0) {
@@ -1800,7 +1733,6 @@ function drawBlood() {
     if (checkpoint == 2) { drawStroked("เดอะ ดวนนี่ หนอนยักษ์ดึ้บดึ้บ", "30px", 6, 500, 910) }
     if (checkpoint == 4) { drawStroked("แอ็กซีออนที่ 10 ผู้อารักขาฐานลับ", "30px", 6, 500, 910) }
     if (checkpoint == 5) { drawStroked("เดอะ บุนชุน โคชุ อัศวินเกราะเคลือบเผ็ด", "30px", 6, 500, 910) }
-    if (checkpoint == 6) { drawStroked("โรโนลด์ แมคโดโนลด์", "30px", 6, 500, 910) }
     ctx.fillStyle = "white"
     ctx.fillRect(500, 932, 901, 44)
     ctx.fillStyle = "black"
@@ -1812,6 +1744,10 @@ function drawBlood() {
 function drawProfile(x, y) {
     if (positionX - 50 <= 500 && positionY - 265 <= 20) {
         x = 1980 - 50 - (sander_pf_st.width) - 370;
+        document.getElementById("cog").style.transform = "translateX(112vh)";
+    }
+    else {
+        document.getElementById("cog").style.transform = "translateX(0vh)";
     }
     ctx.drawImage(sander_pf_st, x, y - sander_pf_st.height - 50, sander_pf_st.width, sander_pf_st.height);
     drawStroked("แซนเดอร์", "32px", 6, x + sander_pf_st.width + 10, y - sander_pf_st.height - 50 + 35);
@@ -1859,57 +1795,67 @@ function drawWeapon(x, y) {
 
 function drawBulletMonster() {
     for (let i = 0; i < monster_bullet_posxy.length; i++) {
-        if (fight_status) {
-            if (monster_bullet_posxy[i][2] == "left" || monster_bullet_posxy[i][2] == "right") {
-                if (Math.abs((positionX+81)-(monster_bullet_posxy[i][0]+80)) <= 100 && Math.abs((positionY+81)-(monster_bullet_posxy[i][1]+32)) <= 100) {
-                    monster_attack = true
-                    player_takedmg = true
-                }
-            }
-            if (monster_bullet_posxy[i][2] == "up" || monster_bullet_posxy[i][2] == "down") {
-                if (Math.abs((positionX+81)-(monster_bullet_posxy[i][0]+32)) <= 150 && Math.abs((positionY+81)-(monster_bullet_posxy[i][1]-32)) <= 150) {
-                    monster_attack = true
-                    player_takedmg = true
-                }
-            }
-        }
-        if (monster_bullet_posxy[i][1] <= 0) {
+        if (monster_bullet_posxy[i][1] <= 0 || monster_bullet_posxy[i][0] <= 0 || monster_bullet_posxy[i][0] >= canvas.width || monster_bullet_posxy[i][1] >= canvas.height) {
             monster_bullet_posxy.splice(i, 1);
             i--;
             continue;
-        }
-        if (monster_bullet_posxy[i][2] == "down") {
-            if (monster_bullet_posxy[i][1] > -162) {
-                monster_bullet_posxy[i][1] -= 18;
-            }
-            boss_bullet = boss_bulletu;
-        }
-        if (monster_bullet_posxy[i][2] == "up") {
-            if (monster_bullet_posxy[i][1] < canvas.height) {
-                monster_bullet_posxy[i][1] += 18;
-            }
-            boss_bullet = boss_bulletd;
+
         }
         if (monster_bullet_posxy[i][2] == "right") {
             if (monster_bullet_posxy[i][0] < canvas.width) {
-                monster_bullet_posxy[i][0] += 18
+                monster_bullet_posxy[i][0] += 10
             }
             boss_bullet = boss_bulletr;
         }
         if (monster_bullet_posxy[i][2] == "left") {
             if (monster_bullet_posxy[i][0] > -162) {
-                monster_bullet_posxy[i][0] -= 18;
+                monster_bullet_posxy[i][0] -= 10;
             }
             boss_bullet = boss_bulletl;
+        }
+        if (tracktime > 0){
+            if (positionY + 81 < monster_bullet_posxy[i][1] + 32){
+                monster_bullet_posxy[i][1] -= 4
+            }
+            else{
+                monster_bullet_posxy[i][1] += 4
+            }
+            tracktime -= 1
         }
         if (monster_bullet_posxy[i][3] > 3) {
             monster_bullet_posxy[i][3] = 3;
         }
         if (monster_bullet_posxy[i][2] == "right" || monster_bullet_posxy[i][2] == "left") {
             ctx.drawImage(boss_bullet, monster_bullet_posxy[i][0], monster_bullet_posxy[i][1], 160, 63);
-        }
-        else {
-            ctx.drawImage(boss_bullet, monster_bullet_posxy[i][0], monster_bullet_posxy[i][1], 63, 160);
+            if (monster_bullet_posxy[i][2] == "right") {
+                if (monster_bullet_posxy[i][0]+160 >= positionX && monster_bullet_posxy[i][0]+160 <= positionX+162 &&
+                    monster_bullet_posxy[i][1]+63 >= positionY && monster_bullet_posxy[i][1]+63 <= positionY+162) {
+                    monster_attack = true
+                    player_takedmg = true
+                    bossbullet_damage = true
+                }
+                else {
+                    player_takedmg = false
+                    bossbullet_damage = false
+                }
+            }
+            if (monster_bullet_posxy[i][2] == "left") {
+                if (monster_bullet_posxy[i][0] <= positionX+162 && monster_bullet_posxy[i][0] >= positionX &&
+                    monster_bullet_posxy[i][1]+63 >= positionY && monster_bullet_posxy[i][1]+63 <= positionY+162) {
+                    monster_attack = true
+                    player_takedmg = true
+                    bossbullet_damage = true
+                }
+                else {
+                    player_takedmg = false
+                    bossbullet_damage = false
+                }
+            }
+            // console.log(Math.abs((monster_bullet_posxy[i][0]+80)-(positionX+81)) , Math.abs(monster_bullet_posxy[i][1]+80)-(positionY+81))
+            // if (Math.abs((monster_bullet_posxy[i][0]+80)-(positionX+81)) <= 162 && Math.abs(monster_bullet_posxy[i][1]+80)-(positionY+81) <= 162) {
+            //     monster_attack = true
+            //     player_takedmg = true
+            // }
         }
         monster_bullet_posxy[i][3] += 1;
     }
@@ -1928,7 +1874,8 @@ function drawBullet() {
                 monster_takedmg = true
                 bullet_damage = true
             }
-            if (checkpoint == 6 && Math.abs((bullet_posxy[i][0] + 81) - (monster_posx[3] + 96)) <= 50 && Math.abs((bullet_posxy[i][1] + 81) - (monster_posy[3] + 96)) <= 80) {
+            if (checkpoint == 6 && Math.abs((bullet_posxy[i][0] + 81) - (monster_posx[3] + 96)) <= 50
+            && Math.abs((bullet_posxy[i][1] + 81) - (monster_posy[3] + 96)) <= 200 && bullet_posxy[i][1]+81 >= monster_posy[3]) {
                 monster_attack = true
                 monster_takedmg = true
                 bullet_damage = true
@@ -1994,19 +1941,10 @@ function dialogue() {
             ctx.drawImage(sander_dia, (myCanvas.width / 2) - (sander_dia.width / 2), 685, sander_dia.width, sander_dia.height);
         }
         if (words[words_index].slice(0, words[words_index].indexOf(":")) == "soldier") {
-            ctx.drawImage(extra0_dia, (myCanvas.width / 2) - (extra0_dia.width / 2), 685, extra0_dia.width, extra0_dia.height);
+            ctx.drawImage(extra0_dia, (myCanvas.width / 2) - (sander_dia.width / 2), 685, sander_dia.width, sander_dia.height);
         }
         if (words[words_index].slice(0, words[words_index].indexOf(":")) == "hadao") {
-            ctx.drawImage(extra1_dia, (myCanvas.width / 2) - (extra1_dia.width / 2), 685, extra1_dia.width, extra1_dia.height);
-        }
-        if (words[words_index].slice(0, words[words_index].indexOf(":")) == "axeon") {
-            ctx.drawImage(axeon_dia, (myCanvas.width / 2) - (axeon_dia.width / 2), 685, axeon_dia.width, axeon_dia.height);
-        }
-        if (words[words_index].slice(0, words[words_index].indexOf(":")) == "bunchun") {
-            ctx.drawImage(bunchun_dia, (myCanvas.width / 2) - (bunchun_dia.width / 2), 685, bunchun_dia.width, bunchun_dia.height);
-        }
-        if (words[words_index].slice(0, words[words_index].indexOf(":")) == "mcdo") {
-            ctx.drawImage(mcdo_dia, (myCanvas.width / 2) - (mcdo_dia.width / 2) - 50, 685, mcdo_dia.width, mcdo_dia.height);
+            ctx.drawImage(extra1_dia, (myCanvas.width / 2) - (sander_dia.width / 2), 685, sander_dia.width, sander_dia.height);
         }
         if (count + 1 < words[words_index].length) { count++ }
         ctx.fillStyle = "white"
@@ -2042,4 +1980,13 @@ function dialogue() {
             }
         }
     }
+}
+
+function setting() {
+    document.getElementById("mySetting").style.display = "flex"
+}
+
+function setVolume() {
+    typesound.volume = document.getElementById("sound").value
+    sandsound.volume = document.getElementById("music").value
 }
