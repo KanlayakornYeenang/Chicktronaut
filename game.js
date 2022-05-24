@@ -1291,7 +1291,7 @@ function gameLoop() {
     if (checkpoint == 6 && currentEvent == 15 && !dialogue_status) {
         fight_status = true;
     }
-    if (checkpoint == 6 && currentEvent == 15 && (hp_monster <= 75 || hp_sander <= 75) && !mouseclick && !keyPresses.Space) {
+    if (checkpoint == 6 && currentEvent == 15 && hp_monster <= 75 && !mouseclick && !keyPresses.Space) {
         comic = true
         fight_status = false;
         document.getElementById("comic-container").style.display = "flex"
