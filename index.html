@@ -20,6 +20,31 @@
     as="image">
 <link rel="preload" href="https://cdn.discordapp.com/attachments/933591523189215235/972361806041477150/2_6.jpg"
     as="image">
+<link rel="preload" href="comic/3_1.jpg" as="image">
+<link rel="preload" href="comic/3_2.jpg" as="image">
+<link rel="preload" href="comic/3_3.jpg" as="image">
+<link rel="preload" href="comic/3_4.jpg" as="image">
+<link rel="preload" href="comic/3_5.jpg" as="image">
+<link rel="preload" href="comic/3_6.jpg" as="image">
+<link rel="preload" href="image/sword.png" as="image">
+<link rel="preload" href="image/gun_inhand_r.png" as="image">
+<link rel="preload" href="comic/4_1.jpg" as="image">
+<link rel="preload" href="comic/4_2.jpg" as="image">
+<link rel="preload" href="comic/4_3.jpg" as="image">
+<link rel="preload" href="comic/4_4.jpg" as="image">
+<link rel="preload" href="comic/5_1.jpg" as="image">
+<link rel="preload" href="comic/5_2.jpg" as="image">
+<link rel="preload" href="comic/5_3.jpg" as="image">
+<link rel="preload" href="comic/5_4.jpg" as="image">
+<link rel="preload" href="comic/5_5.jpg" as="image">
+<link rel="preload" href="comic/5_6.jpg" as="image">
+<link rel="preload" href="comic/5_7.jpg" as="image">
+<link rel="preload" href="comic/6_1.jpg" as="image">
+<link rel="preload" href="comic/6_2.jpg" as="image">
+<link rel="preload" href="comic/6_3.jpg" as="image">
+<link rel="preload" href="comic/6_4.jpg" as="image">
+<link rel="preload" href="comic/6_5.jpg" as="image">
+<link rel="preload" href="comic/6_6.jpg" as="image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,8 +150,7 @@
             font-size: 1.5vw;
         }
 
-        .close:hover
-        {
+        .close:hover {
             color: #aaaaaa;
             text-decoration: none;
             cursor: pointer;
@@ -144,7 +168,6 @@
         }
 
         #inner {
-            opacity: 0;
             position: absolute;
             width: 160vh;
             height: 90vh;
@@ -576,29 +599,33 @@
                 opacity: 0;
             }
 
-            25% {
+            14.5% {
                 background-image: url('comic/5_1.jpg');
                 opacity: 1;
             }
 
-            40% {
+            29% {
                 background-image: url('comic/5_2.jpg');
             }
 
-            55% {
+            43.5% {
                 background-image: url('comic/5_3.jpg');
             }
 
-            70% {
+            58% {
                 background-image: url('comic/5_4.jpg');
             }
 
-            85% {
+            72.5% {
                 background-image: url('comic/5_5.jpg');
             }
 
-            100% {
+            87% {
                 background-image: url('comic/5_6.jpg');
+            }
+
+            100% {
+                background-image: url('comic/5_7.jpg');
             }
         }
 
@@ -681,6 +708,93 @@
 
         #cog:hover {
             cursor: pointer;
+        }
+
+        #endcredit, #contvideo {
+            display: none;
+            position: absolute;
+            width: 160vh;
+            height: 90vh;
+            border: 3px solid transparent;
+        }
+
+        #endcredit {
+            animation: endcredit 60s linear;
+        }
+
+        #video {
+            animation-name: opacity2;
+            animation-duration: 5s;
+            width: 100%;
+            height: 100%;
+            position:absolute;
+            top:0;
+            object-fit: cover;
+            opacity: 0.5;
+        }
+
+        #ct1 {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15vh;
+        }
+
+        #endcontenttext {
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 3vh;
+            color: black;
+            letter-spacing: 0.15vh;
+            text-align: center;
+            background-color: white;
+            width: 50vh;
+            padding: 0.5vh;
+        }
+
+        #content1 {
+            position: relative;
+            transform: translateY(-50%);
+            top: 50%
+        }
+
+        #content2 {
+            position: relative;
+            top: 65%
+        }
+
+        @keyframes endcredit {
+            0% {
+                top: 0%;
+                opacity: 0;
+            }
+            1% {
+                opacity: 1;
+            }
+            100% {
+                top: -500%;
+            }
+        }
+
+        .temp1, .temp2 {
+            width: 160vh;
+            height: 5vh;
+            background-color: black;
+            position: absolute;
+            border: 3px solid black;
+        }
+
+        .temp1 {
+            transform: translateY(-100%);
+        }
+
+        .temp2 {
+            margin-top: 85vh;
+            transform: translateY(100%);
+        }
+
+        #endcreditinf {
+            display: none;
+            transform: translateX(-20vh);
         }
     </style>
 </head>
@@ -767,6 +881,82 @@
                     to skip</p>
             </div>
         </div>
+        <div id="contvideo">
+            <video autoplay="autoplay" id="video">
+                <source src="image/endcredit.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div id="endcredit">
+            <div id="content1">
+                <div id="ct1">
+                    <img src="image/it.png" style="width:12.5%; border-radius:100%;">
+                    <img src="image/cross.png" style="width:12.5%;">
+                    <img src="image/spaceth.png" style="width:12.5%; border-radius:100%;">
+                </div>
+            </div>
+            <div id="content2">
+                <h2 id="endcontenttext">ดร.สุภวรรณ ทัศนประเสริฐ</h2>
+                <h2 id="endcontenttext">จามิกร ผิวละออง</h2>
+                <h2 id="endcontenttext" style="margin-bottom:10vh;">อภิเชฏฐ์ คมวัชรพงศ์</h2>
+                <h2 id="endcontenttext" style="background:#000; color:white">Designers</h2>
+                <h2 id="endcontenttext">พีรวิชญ์ กริชฉกาจ</h2>
+                <h2 id="endcontenttext">กัลยกร ยี่นาง</h2>
+                <h2 id="endcontenttext">ณุทยา นิติอภัยธรรม</h2>
+                <h2 id="endcontenttext">ศศิธร ศรีจันทร์</h2>
+                <h2 id="endcontenttext">ณัฐรดา ธัญญานิตย์</h2>
+                <h2 id="endcontenttext">ศิลา ชูนาม</h2>
+                <h2 id="endcontenttext">จิราพันธ์ ขวัญรักษ์</h2>
+                <h2 id="endcontenttext">จิรโรจน์ เลิศอัครนานนท์</h2>
+                <h2 id="endcontenttext">ฐนกร อมตเวทย์</h2>
+                <h2 id="endcontenttext" style="margin-bottom:10vh;">ชญานนท์ สุภากิจ</h2>
+                <h2 id="endcontenttext" style="background:#000; color:white">Game Developer</h2>
+                <h2 id="endcontenttext">กัลยกร ยี่นาง</h2>
+                <h2 id="endcontenttext">ชญานนท์ สุภากิจ</h2>
+                <h2 id="endcontenttext">ณุทยา นิติอภัยธรรม</h2>
+                <h2 id="endcontenttext">วรดร น้อยนงเยาว์</h2>
+                <h2 id="endcontenttext">ณัฐวุฒิ อุ่นวิเศษ</h2>
+                <h2 id="endcontenttext">พีรวิชญ์ กริชฉกาจ</h2>
+                <h2 id="endcontenttext" style="margin-bottom:10vh;">วชิรพล กลิ่นเกษร</h2>
+                <h2 id="endcontenttext" style="background:#000; color:white">Website Developer</h2>
+                <h2 id="endcontenttext">ศศิธร ศรีจันทร์</h2>
+                <h2 id="endcontenttext">วชิรพล กลิ่นเกษร</h2>
+                <h2 id="endcontenttext">ศุภณัฐ อนุมาตร</h2>
+                <h2 id="endcontenttext">ชยุตรัฐ ศรีอุ้มสุข</h2>
+                <h2 id="endcontenttext" style="margin-bottom:10vh;">ปิยะ ไชยนิตย์</h2>
+                <h2 id="endcontenttext" style="background:#000; color:white">Game Content</h2>
+                <h2 id="endcontenttext">ศุภณัฐ อนุมาตร</h2>
+                <h2 id="endcontenttext">ปิยะ ไชยนิตย์</h2>
+                <h2 id="endcontenttext">ชยุตรัฐ ศรีอุ้มสุข</h2>
+                <h2 id="endcontenttext">ณัฏฐพล สุขไผ่ตา</h2>
+                <h2 id="endcontenttext" style="margin-bottom:10vh;">พงศ์พันธุ์ แสงพล</h2>
+                <h2 id="endcontenttext" style="background:#000; color:white">Website Content</h2>
+                <h2 id="endcontenttext">จิรโรจน์ เลิศอัครนานนท์</h2>
+                <h2 id="endcontenttext">โชตชฎา อุปโยคิน</h2>
+                <h2 id="endcontenttext">ณัชพล ตั้งสาธิตพร</h2>
+                <h2 id="endcontenttext" style="margin-bottom:10vh;">จักรา นครจันทร์</h2>
+                <h2 id="endcontenttext" style="background:#000; color:white">Overall Management</h2>
+                <h2 id="endcontenttext">จิราพันธ์ ขวัญรักษ์</h2>
+                <h2 id="endcontenttext">โชตชฎา อุปโยคิน</h2>
+                <h2 id="endcontenttext">ฐนกร อมตเวทย์</h2>
+                <h2 id="endcontenttext">อินทุมดี มะลิแย้ม</h2>
+                <h2 id="endcontenttext">ณัชพล ตั้งสาธิตพร</h2>
+            </div>
+        </div>
+        <div id="endcreditinf">
+            <div id="information" style="transform:translate(-50vh, 70.4vh);">
+                <a href="https://landingasgard.netlify.app/" target="_blank">
+                    <img id="sander"
+                        src="https://cdn.discordapp.com/attachments/933591523189215235/967802503288741920/sander.png">
+                </a>
+                <img id="inf1"
+                    src="https://cdn.discordapp.com/attachments/933591523189215235/967804898957754408/information1.png">
+                <img id="inf2"
+                    src="https://cdn.discordapp.com/attachments/933591523189215235/967805094781419580/information2.png">
+                <h1 id="inf">เรียนรู้เพิ่มเติมเกี่ยวกับ<br>ประชาธิปไตยในอวกาศ</h1>
+            </div>
+        </div>
+        <div class="temp1"></div>
+        <div class="temp2"></div>
     </div>
     <div id="myModal" class="modal">
         <div class="modal-content">
@@ -791,13 +981,13 @@
                     <div style="display:flex;">
                         <i style="color:white; font-size:10vh;" class="material-icons">&#xe050;</i>
                         <h1 style="color:white; font-size:4.5vh; letter-spacing:0.25vh;">Sound</h1>
-                        <input type="range" min="0.1" max="1" value="0.5" step="0.1" class="slider" id="sound"
+                        <input type="range" min="0" max="1" value="0.5" step="0.1" class="slider" id="sound"
                             style="margin-left:2.5vh;" onchange="setVolume()">
                     </div>
                     <div style="display:flex;">
                         <i style="color:white; font-size:10vh;" class="material-icons">&#xe405;</i>
                         <h1 style="color:white; font-size:4.5vh; letter-spacing:0.25vh">Music</h1>
-                        <input type="range" min="0.1" max="1" value="0.5" step="0.1" class="slider" id="music"
+                        <input type="range" min="0" max="1" value="0.5" step="0.1" class="slider" id="music"
                             style="margin-left:2.5vh;" onchange="setVolume()">
                     </div>
                 </div>
