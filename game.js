@@ -892,7 +892,9 @@ function gameLoop() {
     document.getElementById("comic-container").style.display == "none"
   ) {
     if (energy != 0) {
-      if (!isGodMode) { energy -= 1 }
+      if (!isGodMode) {
+        energy -= 1;
+      }
       gunsound.play();
     }
     if (bullet_timer <= 0) {
@@ -4006,7 +4008,9 @@ function toggleGodmode() {
   isGodMode = !isGodMode;
 
   const godeModeImage = document.getElementById("godmode");
-  godeModeImage.src = isGodMode ? "image/godmode_on.png" : "image/godmode_off.png";
+  godeModeImage.src = isGodMode
+    ? "image/godmode_on.png"
+    : "image/godmode_off.png";
 }
 
 function setVolume() {
