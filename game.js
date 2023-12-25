@@ -108,6 +108,7 @@ let textx = 788;
 let texty = 925;
 let allowNextdialogue = false;
 let nextdialogue = false;
+let isGodMode = false;
 
 let box1 = new Image();
 let box2 = new Image();
@@ -891,7 +892,7 @@ function gameLoop() {
     document.getElementById("comic-container").style.display == "none"
   ) {
     if (energy != 0) {
-      energy -= 1;
+      if (!isGodMode) { energy -= 1 }
       gunsound.play();
     }
     if (bullet_timer <= 0) {
@@ -3320,7 +3321,7 @@ function gameLoop() {
       }
     }
 
-    if (player_takedmg) {
+    if (player_takedmg && !isGodMode) {
       hitsound.play();
       if (checkpoint == 2) {
         hp_sander -= 0.5;
@@ -3545,32 +3546,42 @@ function drawStroked(text, size, linew, x, y) {
 }
 
 function drawBlood() {
-  if (checkpoint == 2) {
-    drawStroked("เดอะ ดวนนี่ หนอนยักษ์ดึ้บดึ้บ", "30px", 6, 500, 910);
+  if (hp_monster > 0) {
+    if (checkpoint == 2) {
+      drawStroked("เดอะ ดวนนี่ หนอนยักษ์ดึ้บดึ้บ", "30px", 6, 500, 910);
+    }
+    if (checkpoint == 4) {
+      drawStroked("แอ็กซีออนที่ 10 ผู้อารักขาฐานลับ", "30px", 6, 500, 910);
+    }
+    if (checkpoint == 5) {
+      drawStroked(
+        "เดอะ บุนชุน โคชุ อัศวินเกราะเคลือบเผ็ด",
+        "30px",
+        6,
+        500,
+        910
+      );
+    }
+    if (checkpoint == 6) {
+      drawStroked("โรนัลโดลด์ แมคโดโนลด์", "30px", 6, 500, 910);
+    }
+    ctx.fillStyle = "white";
+    ctx.fillRect(500, 932, 901, 44);
+    ctx.fillStyle = "black";
+    ctx.fillRect(505, 937, 891, 34);
+    ctx.fillStyle = "red";
+    ctx.fillRect(510, 942, hp_monster * 5.87, 24);
   }
-  if (checkpoint == 4) {
-    drawStroked("แอ็กซีออนที่ 10 ผู้อารักขาฐานลับ", "30px", 6, 500, 910);
-  }
-  if (checkpoint == 5) {
-    drawStroked("เดอะ บุนชุน โคชุ อัศวินเกราะเคลือบเผ็ด", "30px", 6, 500, 910);
-  }
-  if (checkpoint == 6) {
-    drawStroked("โรนัลโดลด์ แมคโดโนลด์", "30px", 6, 500, 910);
-  }
-  ctx.fillStyle = "white";
-  ctx.fillRect(500, 932, 901, 44);
-  ctx.fillStyle = "black";
-  ctx.fillRect(505, 937, 891, 34);
-  ctx.fillStyle = "red";
-  ctx.fillRect(510, 942, hp_monster * 5.87, 24);
 }
 
 function drawProfile(x, y) {
   if (positionX - 50 <= 500 && positionY - 265 <= 20) {
     x = 1980 - 50 - sander_pf_st.width - 370;
     document.getElementById("cog").style.transform = "translateX(112vh)";
+    document.getElementById("godmode").style.transform = "translateX(112vh)";
   } else {
     document.getElementById("cog").style.transform = "translateX(0vh)";
+    document.getElementById("godmode").style.transform = "translateX(0vh)";
   }
   ctx.drawImage(
     sander_pf_st,
@@ -3989,6 +4000,13 @@ function dialogue() {
 
 function setting() {
   document.getElementById("mySetting").style.display = "flex";
+}
+
+function toggleGodmode() {
+  isGodMode = !isGodMode;
+
+  const godeModeImage = document.getElementById("godmode");
+  godeModeImage.src = isGodMode ? "image/godmode_on.png" : "image/godmode_off.png";
 }
 
 function setVolume() {
